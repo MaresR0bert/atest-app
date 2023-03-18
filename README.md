@@ -1,4 +1,9 @@
 TO RUN THE SERVER:
 
-`npm i`
-`npx ts-node .\src\atest-main.ts`
+```shell
+npm i
+```
+
+```shell
+npx ts-node .\src\atest-main.ts
+```
