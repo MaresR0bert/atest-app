@@ -1,11 +1,13 @@
 import jwt from "jsonwebtoken";
-import {RefreshToken, User} from "../schemas/exportSchemas";
 import argon2 from 'argon2';
+import {RefreshToken, User} from "../schemas/exportSchemas";
+import {emailRegexValidator} from "../util/exportUtil";
+import {responseCreator} from "../util/exportUtil";
 
 const signUp = async (req: any, res: any) => {
-    const regExpression: RegExp = new RegExp(process.env.REGEX!);
-    if(!regExpression.test(req.body.username)){
-        return res.status(400).json("Invalid Email Address");
+
+    if(!emailRegexValidator(req.body.username)){
+        return responseCreator(res, 400, {error: "Bad email address"});
     }
 
     const userDoc = new User({
@@ -24,14 +26,15 @@ const signUp = async (req: any, res: any) => {
     const accessToken = createAccessToken(userDoc.id);
     const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id);
 
-    return res.status(200).json({
+    return responseCreator(res, 200, {
         id: userDoc.id,
         accessToken,
         refreshToken
-    });
+    })
 }
 
 const createAccessToken = (userId: String): any => {
+
     return jwt.sign({
         userId: userId
     }, process.env.ACCESS_TOKEN_SECRET!, {
@@ -40,6 +43,7 @@ const createAccessToken = (userId: String): any => {
 }
 
 const createRefreshToken = (userId: String, refreshTokenId: String): any => {
+
     return jwt.sign({
         userId: userId,
         tokenId: refreshTokenId
