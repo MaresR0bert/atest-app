@@ -1,10 +1,10 @@
 import express from "express";
-import {signUp} from "../services/exportServices";
+import {authService} from "../services/exportServices";
 
 const router = express.Router();
 
-router.post("/signup", signUp);
-router.post("/login", ()=>{});
+router.post("/signup", authService.signUp);
+router.post("/login", authService.logIn);
 router.post("/logout", ()=>{});
 router.post("/acessToken", ()=>{});
 router.post("/refreshToken", ()=>{});

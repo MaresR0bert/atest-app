@@ -1,37 +1,7 @@
 import jwt from "jsonwebtoken";
 import argon2 from 'argon2';
 import {RefreshToken, User} from "../schemas/exportSchemas";
-import {emailRegexValidator} from "../util/exportUtil";
-import {responseCreator} from "../util/exportUtil";
-
-const signUp = async (req: any, res: any) => {
-
-    if(!emailRegexValidator(req.body.username)){
-        return responseCreator(res, 400, {error: "Bad email address"});
-    }
-
-    const userDoc = new User({
-        username: req.body.username,
-        password: await argon2.hash(req.body.password),
-        role: req.body.role
-    });
-
-    const refreshTokenDoc = new RefreshToken({
-        owner: userDoc.id
-    });
-
-    await userDoc.save();
-    await refreshTokenDoc.save();
-
-    const accessToken = createAccessToken(userDoc.id);
-    const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id);
-
-    return responseCreator(res, 200, {
-        id: userDoc.id,
-        accessToken,
-        refreshToken
-    })
-}
+import {responseFactory, logger, emailRegexValidator, passwordRegexValidator} from "../util/exportUtil";
 
 const createAccessToken = (userId: String): any => {
 
@@ -52,4 +22,90 @@ const createRefreshToken = (userId: String, refreshTokenId: String): any => {
     });
 }
 
-export default signUp;
+const verifyPassword = async (hashedPassword: string, givenPassword: string): Promise<boolean> => {
+    return await argon2.verify(hashedPassword, givenPassword);
+}
+
+const signUp = async (req: any, res: any) => {
+
+    if(!emailRegexValidator(req.body.username)){
+        return responseFactory(res, 400, {error: "Bad email address"});
+    }
+
+    if(!passwordRegexValidator(req.body.password)){
+        return responseFactory(res, 400, {error: "Password too simple"});
+    }
+
+    const userDoc = new User({
+        username: req.body.username,
+        password: await argon2.hash(req.body.password),
+        role: req.body.role
+    });
+
+    const refreshTokenDoc = new RefreshToken({
+        owner: userDoc.id
+    });
+
+    try{
+        await userDoc.save();
+    } catch (err) {
+        logger.error(err);
+        return responseFactory(res, 400, {error: "Malformed Credentials"});
+    }
+
+    try{
+        await refreshTokenDoc.save();
+    } catch (err) {
+        logger.error(err);
+        return responseFactory(res, 400, {error: "Malformed Credentials"});
+    }
+
+    const accessToken = createAccessToken(userDoc.id);
+    const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id);
+
+    return responseFactory(res, 200, {
+        id: userDoc.id,
+        accessToken,
+        refreshToken
+    })
+}
+
+const logIn = async (req: any, res: any) => {
+
+    if(!emailRegexValidator(req.body.username)){
+        return responseFactory(res, 400, {error: "Bad credentials"});
+    }
+
+    const userDoc = await User
+        .findOne({username: req.body.username})
+        .select("+password")
+        .exec();
+
+    if(!userDoc
+        || !userDoc.password
+        || !(await verifyPassword(userDoc.password, req.body.password))) {
+        return responseFactory(res, 400, {error: "Bad Credentials"});
+    }
+
+    const refreshTokenDoc = new RefreshToken({
+        owner: userDoc.id
+    });
+
+    try {
+        await refreshTokenDoc.save();
+    } catch (err) {
+        logger.error(err);
+        return responseFactory(res, 400, {error: "Malformed Credentials"});
+    }
+
+    const accessToken = createAccessToken(userDoc.id);
+    const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id);
+
+    return responseFactory(res, 200, {
+        id: userDoc.id,
+        accessToken,
+        refreshToken
+    });
+}
+
+export default {signUp, logIn};
