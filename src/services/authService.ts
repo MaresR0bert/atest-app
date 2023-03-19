@@ -3,6 +3,11 @@ import {RefreshToken, User} from "../schemas/exportSchemas";
 import argon2 from 'argon2';
 
 const signUp = async (req: any, res: any) => {
+    const regExpression: RegExp = new RegExp(process.env.REGEX!);
+    if(!regExpression.test(req.body.username)){
+        return res.status(400).json("Invalid Email Address");
+    }
+
     const userDoc = new User({
         username: req.body.username,
         password: await argon2.hash(req.body.password),
@@ -23,10 +28,7 @@ const signUp = async (req: any, res: any) => {
         id: userDoc.id,
         accessToken,
         refreshToken
-    }).catch((err: any) => {
-        res.status(404)
-            .json("Error: " + err)
-    })
+    });
 }
 
 const createAccessToken = (userId: String): any => {
