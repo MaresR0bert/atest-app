@@ -87,6 +87,13 @@ const logIn = async (req: any, res: any) => {
         return responseFactory(res, 400, {error: "Bad Credentials"});
     }
 
+    const tokenExists = await RefreshToken.exists({owner: userDoc.id})
+    if (tokenExists) {
+        return responseFactory(res, 401, {
+            error: "User is already authenticated"
+        });
+    }
+
     const refreshTokenDoc = new RefreshToken({
         owner: userDoc.id
     });
@@ -147,6 +154,12 @@ const newAccessToken = async (req: any, res: any) => {
     }
 }
 
+const logOut = async (req: any, res: any) => {
+    const refreshToken = await verifyRefreshToken(req.body.refreshToken);
+    await RefreshToken.deleteOne({_id: refreshToken.tokenId});
+    return responseFactory(res, 200, {status: "success"});
+}
+
 const verifyRefreshToken = async (token: string) => {
     const decodeToken = () : JwtPayload => {
         try{
@@ -169,4 +182,4 @@ const verifyRefreshToken = async (token: string) => {
     }
 }
 
-export default {signUp, logIn, newRefreshToken, newAccessToken};
+export default {signUp, logIn, newRefreshToken, newAccessToken, logOut};
