@@ -132,6 +132,21 @@ const newRefreshToken = async (req: any, res: any) => {
     }
 }
 
+const newAccessToken = async (req: any, res: any) => {
+    try {
+        const refreshToken = await verifyRefreshToken(req.body.refreshToken);
+        const accessToken = createAccessToken(refreshToken.userId);
+
+        return responseFactory(res, 200, {
+            id: refreshToken.userId,
+            accessToken,
+            refreshToken: req.body.refreshToken
+        });
+    } catch (err) {
+        return responseFactory(res, 401, {error: err});
+    }
+}
+
 const verifyRefreshToken = async (token: string) => {
     const decodeToken = () : JwtPayload => {
         try{
@@ -154,4 +169,4 @@ const verifyRefreshToken = async (token: string) => {
     }
 }
 
-export default {signUp, logIn, newRefreshToken};
+export default {signUp, logIn, newRefreshToken, newAccessToken};
