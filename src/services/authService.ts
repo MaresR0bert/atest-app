@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, {JwtPayload} from "jsonwebtoken";
 import argon2 from 'argon2';
 import {RefreshToken, User} from "../schemas/exportSchemas";
 import {responseFactory, logger, emailRegexValidator, passwordRegexValidator} from "../util/exportUtil";
@@ -108,4 +108,50 @@ const logIn = async (req: any, res: any) => {
     });
 }
 
-export default {signUp, logIn};
+const newRefreshToken = async (req: any, res: any) => {
+
+    try {
+        const currentRefreshToken = await verifyRefreshToken(req.body.refreshToken);
+        const refreshTokenDoc = new RefreshToken({
+            owner: currentRefreshToken.userId
+        })
+
+        await refreshTokenDoc.save();
+        await RefreshToken.deleteOne({_id: currentRefreshToken.tokenId})
+
+        const refreshToken = createRefreshToken(currentRefreshToken.userId, refreshTokenDoc.id);
+        const accessToken = createAccessToken(currentRefreshToken.userId);
+
+        return responseFactory(res, 200, {
+            id: currentRefreshToken.userId,
+            accessToken,
+            refreshToken
+        });
+    } catch (err) {
+        return responseFactory(res, 401, {error: err});
+    }
+}
+
+const verifyRefreshToken = async (token: string) => {
+    const decodeToken = () : JwtPayload => {
+        try{
+            return <JwtPayload>jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!);
+        } catch (err){
+            throw "Unauthorized";
+        }
+    }
+
+    try{
+        const decodedToken = decodeToken();
+        const tokenExists = await RefreshToken.exists({_id: decodedToken.tokenId});
+        if (tokenExists) {
+            return decodedToken;
+        } else {
+            throw "Unauthorized";
+        }
+    } catch (err) {
+        throw err;
+    }
+}
+
+export default {signUp, logIn, newRefreshToken};
