@@ -118,7 +118,7 @@ const logIn = async (req: any, res: any) => {
 const newRefreshToken = async (req: any, res: any) => {
 
     try {
-        const currentRefreshToken = await verifyRefreshToken(req.body.refreshToken);
+        const currentRefreshToken: JwtPayload = await verifyRefreshToken(req.body.refreshToken);
         const refreshTokenDoc = new RefreshToken({
             owner: currentRefreshToken.userId
         })
@@ -141,7 +141,7 @@ const newRefreshToken = async (req: any, res: any) => {
 
 const newAccessToken = async (req: any, res: any) => {
     try {
-        const refreshToken = await verifyRefreshToken(req.body.refreshToken);
+        const refreshToken: JwtPayload = await verifyRefreshToken(req.body.refreshToken);
         const accessToken = createAccessToken(refreshToken.userId);
 
         return responseFactory(res, 200, {
@@ -173,16 +173,12 @@ const verifyRefreshToken = async (token: string): Promise<JwtPayload> => {
         }
     }
 
-    try{
-        const decodedToken: JwtPayload = decodeToken();
-        const tokenExists = await RefreshToken.exists({_id: decodedToken.tokenId});
-        if (tokenExists) {
-            return decodedToken;
-        } else {
-            throw "Unauthorized";
-        }
-    } catch (err) {
-        throw err;
+    const decodedToken: JwtPayload = decodeToken();
+    const tokenExists = await RefreshToken.exists({_id: decodedToken.tokenId});
+    if (tokenExists) {
+        return decodedToken;
+    } else {
+        throw "Unauthorized";
     }
 }
 
