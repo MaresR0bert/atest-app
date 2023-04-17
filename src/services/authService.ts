@@ -50,7 +50,7 @@ const signUp = async (req: any, res: any) => {
         await userDoc.save();
     } catch (err) {
         logger.error(err);
-        return responseFactory(res, 400, {error: "Malformed Credentials"});
+        return responseFactory(res, 400, {error: "User Already Exists"});
     }
 
     try{
@@ -155,12 +155,16 @@ const newAccessToken = async (req: any, res: any) => {
 }
 
 const logOut = async (req: any, res: any) => {
-    const refreshToken = await verifyRefreshToken(req.body.refreshToken);
-    await RefreshToken.deleteOne({_id: refreshToken.tokenId});
-    return responseFactory(res, 200, {status: "success"});
+    try {
+        const refreshToken: JwtPayload = await verifyRefreshToken(req.body.refreshToken);
+        await RefreshToken.deleteOne({_id: refreshToken.tokenId});
+        return responseFactory(res, 200, {status: "success"});
+    } catch (err) {
+        return responseFactory(res, 404, {error: err});
+    }
 }
 
-const verifyRefreshToken = async (token: string) => {
+const verifyRefreshToken = async (token: string): Promise<JwtPayload> => {
     const decodeToken = () : JwtPayload => {
         try{
             return <JwtPayload>jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!);
@@ -170,7 +174,7 @@ const verifyRefreshToken = async (token: string) => {
     }
 
     try{
-        const decodedToken = decodeToken();
+        const decodedToken: JwtPayload = decodeToken();
         const tokenExists = await RefreshToken.exists({_id: decodedToken.tokenId});
         if (tokenExists) {
             return decodedToken;
