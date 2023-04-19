@@ -1,5 +1,5 @@
 <mat-card>
-  <img ngSrc="/assets/login-form-image.png" alt="" height="240" width="360">
+  <img ngSrc="/assets/login-form-image.png" alt="" priority height="240" width="360">
   <mat-card-title>Login</mat-card-title>
   <mat-card-content>
     <form [formGroup]="form" (ngSubmit)="submit()">
@@ -22,10 +22,18 @@
           </mat-icon>
         </mat-form-field>
       </p>
-      <div class="button">
-        <button type="submit" mat-button>Login</button>
-      </div>
-
+      <mat-grid-list cols="2" rowHeight="2:1">
+        <mat-grid-tile>
+          <div class="button">
+            <button type="submit" mat-flat-button color="primary">Login</button>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="button">
+            <button mat-flat-button color="primary" (click)="router.navigate(['/signup'])">Register Here!</button>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
     </form>
   </mat-card-content>
 </mat-card>

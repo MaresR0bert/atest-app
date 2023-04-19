@@ -35,8 +35,3 @@ mat-card-content {
   display: flex;
   justify-content: flex-end;
 }
-
-button {
-  color: white !important;
-  background-color: #36013F;
-}

@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {User} from "../../models/user.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login-form',
@@ -16,6 +17,9 @@ export class LoginFormComponent {
     password: new FormControl(''),
   });
 
+  constructor(public router: Router) {
+  }
+
   submit(): void {
     const user: User = {
       username: this.form.get("username")?.value,
@@ -26,6 +30,5 @@ export class LoginFormComponent {
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
-    this.error = "Invalid Credentials!"
   }
 }
