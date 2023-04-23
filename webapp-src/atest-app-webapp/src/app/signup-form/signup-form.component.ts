@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
-import {User} from "../../models/user.model";
 import {Router} from "@angular/router";
+import {UserSignup} from "../../models/user.signup.model";
+import {AccountService} from "../services/account.service";
 
 @Component({
   selector: 'app-signup-form',
@@ -18,7 +19,7 @@ export class SignupFormComponent {
     confirmedPassword: new FormControl('')
   });
 
-  constructor(public router: Router) {
+  constructor(public router: Router, private accountService: AccountService) {
   }
 
   submit(): void {
@@ -28,12 +29,22 @@ export class SignupFormComponent {
       return;
     }
 
-    const user: User = {
+    const userSignup: UserSignup = {
       username: this.form.get("username")?.value,
-      password: this.form.get("password")?.value
+      password: this.form.get("password")?.value,
+      role: "ROLE_STUDENT"
     }
 
-    console.log(JSON.stringify(user));
+    this.accountService.onSignup(userSignup).subscribe((res: any) => {
+      localStorage.setItem('accessToken', res.accessToken);
+      localStorage.setItem('refresh', res.refreshToken);
+      console.log(res);
+      this.router.navigateByUrl('/dashboard');
+    })
+
+    console.log(JSON.stringify(userSignup));
+
+
   }
 
   togglePasswordVisibility(): void {
