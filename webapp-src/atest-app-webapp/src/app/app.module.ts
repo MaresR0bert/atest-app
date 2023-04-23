@@ -14,12 +14,15 @@ import {MatButtonModule} from "@angular/material/button";
 import {NgOptimizedImage} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {MatGridListModule} from "@angular/material/grid-list";
+import {HttpClientModule} from "@angular/common/http";
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginFormComponent,
     SignupFormComponent,
+    DashboardComponent,
   ],
     imports: [
         BrowserModule,
@@ -32,7 +35,8 @@ import {MatGridListModule} from "@angular/material/grid-list";
         MatButtonModule,
         NgOptimizedImage,
         MatIconModule,
-        MatGridListModule
+        MatGridListModule,
+        HttpClientModule
     ],
   providers: [],
   bootstrap: [AppComponent]

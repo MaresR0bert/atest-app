@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {User} from "../../models/user.model";
 import {Router} from "@angular/router";
+import {AccountService} from "../services/account.service";
 
 @Component({
   selector: 'app-login-form',
@@ -17,7 +18,7 @@ export class LoginFormComponent {
     password: new FormControl(''),
   });
 
-  constructor(public router: Router) {
+  constructor(public router: Router, private accountService: AccountService) {
   }
 
   submit(): void {
@@ -26,6 +27,12 @@ export class LoginFormComponent {
       password: this.form.get("password")?.value
     }
     console.log(JSON.stringify(user));
+    this.accountService.onLogin(user).subscribe((res: any) => {
+      localStorage.setItem('accessToken', res.accessToken);
+      localStorage.setItem('refresh', res.refreshToken);
+      console.log(res);
+      this.router.navigateByUrl('/dashboard');
+    });
   }
 
   togglePasswordVisibility(): void {
