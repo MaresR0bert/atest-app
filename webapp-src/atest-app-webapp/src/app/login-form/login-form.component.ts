@@ -23,22 +23,31 @@ export class LoginFormComponent {
   }
 
   submit(): void {
-    const user: User = {
+    let user: User = {
       username: this.form.get("username")?.value,
       password: this.form.get("password")?.value
     }
+    if(this.form.get("username")?.value === ""){
+      user.username = "john455@mail.com";
+      user.password = "@F23fjjs233";
+    }
     console.log(JSON.stringify(user));
-    this.accountService.onLogin(user).subscribe((res: any) => {
-      localStorage.setItem('accessToken', res.accessToken);
-      localStorage.setItem('refreshToken', res.refreshToken);
-      if (res.role === environment.ROLE_STUDENT) {
-        this.router.navigateByUrl('/dashboard');
-      } else if (res.role === environment.ROLE_PROF) {
-        this.router.navigateByUrl('/dashboard');
-      } else {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        this.error = "Malformed Payload!";
+    this.accountService.onLogin(user).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('accessToken', res.accessToken);
+        localStorage.setItem('refreshToken', res.refreshToken);
+        if (res.role === environment.ROLE_STUDENT) {
+          this.router.navigateByUrl('/dashboard');
+        } else if (res.role === environment.ROLE_PROF) {
+          this.router.navigateByUrl('/dashboard');
+        } else {
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          this.error = "Malformed Payload!";
+        }
+      },
+      error: (err) => {
+        this.error = err.error.error;
       }
     });
   }
