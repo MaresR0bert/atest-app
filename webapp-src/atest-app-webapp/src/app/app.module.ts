@@ -16,6 +16,9 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {HttpClientModule} from "@angular/common/http";
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {NavbarComponent} from "./navbar/navbar.component";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatMenuModule} from "@angular/material/menu";
 
 @NgModule({
   declarations: [
@@ -23,21 +26,24 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     LoginFormComponent,
     SignupFormComponent,
     DashboardComponent,
+    NavbarComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatInputModule,
-        MatCardModule,
-        MatFormFieldModule,
-        ReactiveFormsModule,
-        MatButtonModule,
-        NgOptimizedImage,
-        MatIconModule,
-        MatGridListModule,
-        HttpClientModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatCardModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    NgOptimizedImage,
+    MatIconModule,
+    MatGridListModule,
+    HttpClientModule,
+    MatToolbarModule,
+    MatMenuModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

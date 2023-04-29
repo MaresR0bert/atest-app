@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-dashboard',
@@ -7,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class DashboardComponent {
 
+  error: string | null;
+  form: FormGroup = new FormGroup({
+    testCode: new FormControl('')
+  });
+
+  submit(){
+    this.error = "SO BAAAAD";
+  }
 }

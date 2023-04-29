@@ -12,11 +12,23 @@ export class AccountService {
 
   constructor(private http: HttpClient) { }
 
-  onLogin(user: User): Observable<any>{
+  onLogin(user: User): Observable<any> {
     return this.http.post(environment.LOGIN_ENDPOINT, user);
   }
 
-  onSignup(userSingup: UserSignup): Observable<any>{
+  onSignup(userSingup: UserSignup): Observable<any> {
     return this.http.post(environment.SIGNUP_ENDPOINT, userSingup);
+  }
+
+  onLogout(): Observable<any> | null {
+    if(!localStorage.getItem("refreshToken")){
+      return null;
+    }
+
+    const refreshTokenJSON = {
+      "refreshToken": localStorage.getItem("refreshToken")
+    }
+
+    return this.http.post(environment.LOGOUT_ENDPOINT, refreshTokenJSON);
   }
 }

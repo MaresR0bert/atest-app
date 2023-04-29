@@ -29,7 +29,7 @@ export class LoginFormComponent {
     console.log(JSON.stringify(user));
     this.accountService.onLogin(user).subscribe((res: any) => {
       localStorage.setItem('accessToken', res.accessToken);
-      localStorage.setItem('refresh', res.refreshToken);
+      localStorage.setItem('refreshToken', res.refreshToken);
       console.log(res);
       this.router.navigateByUrl('/dashboard');
     });

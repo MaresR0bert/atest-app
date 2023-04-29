@@ -1,0 +1,45 @@
+.host {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+}
+
+.roomCode {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.mat-form-field {
+  width: 150%;
+  min-width: 300px;
+}
+
+mat-card-title {
+  display: flex;
+  justify-content: center;
+  padding: 50PX;
+  font-size: 40px;
+  color: #36013F;
+}
+
+mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+
+.error {
+  padding: 12px;
+  width: 375px;
+  color: white;
+  background-color: crimson;
+  text-align: center;
+  font-weight: bold;
+  margin: 30px;
+  justify-content: center;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+}

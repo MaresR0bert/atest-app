@@ -1,1 +1,24 @@
-<p>dashboard works!</p>
+<app-navbar/>
+<div class="host">
+  <mat-card>
+    <div>
+      <mat-card-title>Input Test Code:</mat-card-title>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <p *ngIf="error" class="error">
+          {{ error }}
+        </p>
+        <br/>
+        <p class="roomCode">
+          <mat-form-field [style.width.px]=400 appearance="outline">
+            <mat-label>Test Code</mat-label>
+            <input type="text" matInput placeholder="Test Code" formControlName="testCode">
+          </mat-form-field>
+        </p>
+        <div class="button">
+          <button type="submit" mat-flat-button color="primary">Enter Test</button>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>
+
