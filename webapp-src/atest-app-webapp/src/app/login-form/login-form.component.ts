@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {User} from "../../models/user.model";
 import {Router} from "@angular/router";
 import {AccountService} from "../services/account.service";
+import {environment} from "../../environments/environment.development";
 
 @Component({
   selector: 'app-login-form',
@@ -30,8 +31,15 @@ export class LoginFormComponent {
     this.accountService.onLogin(user).subscribe((res: any) => {
       localStorage.setItem('accessToken', res.accessToken);
       localStorage.setItem('refreshToken', res.refreshToken);
-      console.log(res);
-      this.router.navigateByUrl('/dashboard');
+      if (res.role === environment.ROLE_STUDENT) {
+        this.router.navigateByUrl('/dashboard');
+      } else if (res.role === environment.ROLE_PROF) {
+        this.router.navigateByUrl('/dashboard');
+      } else {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        this.error = "Malformed Payload!";
+      }
     });
   }
 

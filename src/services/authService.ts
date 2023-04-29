@@ -78,7 +78,7 @@ const logIn = async (req: any, res: any) => {
 
     const userDoc = await User
         .findOne({username: req.body.username})
-        .select("+password")
+        .select("+password +role")
         .exec();
 
     if(!userDoc
@@ -111,7 +111,8 @@ const logIn = async (req: any, res: any) => {
     return responseFactory(res, 200, {
         id: userDoc.id,
         accessToken,
-        refreshToken
+        refreshToken,
+        role: userDoc.role
     });
 }
 
