@@ -1,0 +1,19 @@
+.content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.message {
+  color: white;
+  font-weight: bold;
+  font-size: xxx-large;
+}
+
+.exit {
+  color: white;
+  font-weight: bold;
+  font-size: xx-large;
+}

@@ -36,15 +36,10 @@ export class SignupFormComponent {
     }
 
     this.accountService.onSignup(userSignup).subscribe((res: any) => {
-      localStorage.setItem('accessToken', res.accessToken);
-      localStorage.setItem('refresh', res.refreshToken);
+      //localStorage.setItem('refreshToken', res.refreshToken);
       console.log(res);
       this.router.navigateByUrl('/dashboard');
     })
-
-    console.log(JSON.stringify(userSignup));
-
-
   }
 
   togglePasswordVisibility(): void {

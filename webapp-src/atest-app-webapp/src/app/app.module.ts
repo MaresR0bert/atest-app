@@ -19,6 +19,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import {NavbarComponent} from "./navbar/navbar.component";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatMenuModule} from "@angular/material/menu";
+import { TeacherDashboardComponent } from './teacher-dashboard/teacher-dashboard.component';
+import { TeacherNavbarComponent } from './teacher-navbar/teacher-navbar.component';
+import { QuestionCrudComponent } from './question-crud/question-crud.component';
+import { QuestionListComponent } from './question-list/question-list.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +31,12 @@ import {MatMenuModule} from "@angular/material/menu";
     LoginFormComponent,
     SignupFormComponent,
     DashboardComponent,
-    NavbarComponent
+    NavbarComponent,
+    TeacherDashboardComponent,
+    TeacherNavbarComponent,
+    QuestionCrudComponent,
+    QuestionListComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

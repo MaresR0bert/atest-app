@@ -18,7 +18,7 @@ const createRefreshToken = (userId: String, refreshTokenId: String): any => {
         userId: userId,
         tokenId: refreshTokenId
     }, process.env.REFRESH_TOKEN_SECRET!, {
-        expiresIn: '30d'
+        expiresIn: '6h'
     });
 }
 
@@ -63,11 +63,17 @@ const signUp = async (req: any, res: any) => {
     const accessToken = createAccessToken(userDoc.id);
     const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id);
 
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        withCredentials: true
+    })
+
     return responseFactory(res, 200, {
         id: userDoc.id,
         accessToken,
-        refreshToken
-    })
+        refreshToken,
+        role: "ROLE_STUDENT"
+    });
 }
 
 const logIn = async (req: any, res: any) => {
@@ -107,6 +113,11 @@ const logIn = async (req: any, res: any) => {
 
     const accessToken = createAccessToken(userDoc.id);
     const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id);
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        withCredentials: true
+    })
 
     return responseFactory(res, 200, {
         id: userDoc.id,
@@ -157,7 +168,7 @@ const newAccessToken = async (req: any, res: any) => {
 
 const logOut = async (req: any, res: any) => {
     try {
-        const refreshToken: JwtPayload = await verifyRefreshToken(req.body.refreshToken);
+        const refreshToken: JwtPayload = await verifyRefreshToken(req.cookies.refreshToken);
         await RefreshToken.deleteOne({_id: refreshToken.tokenId});
         return responseFactory(res, 200, {status: "success"});
     } catch (err) {

@@ -10,25 +10,20 @@ import {UserSignup} from "../../models/user.signup.model";
 })
 export class AccountService {
 
+  options = {
+    withCredentials: true
+  }
   constructor(private http: HttpClient) { }
 
   onLogin(user: User): Observable<any> {
-    return this.http.post(environment.LOGIN_ENDPOINT, user);
+    return this.http.post(environment.LOGIN_ENDPOINT, user, this.options);
   }
 
-  onSignup(userSingup: UserSignup): Observable<any> {
-    return this.http.post(environment.SIGNUP_ENDPOINT, userSingup);
+  onSignup(userSignup: UserSignup): Observable<any> {
+    return this.http.post(environment.SIGNUP_ENDPOINT, userSignup, this.options);
   }
 
   onLogout(): Observable<any> | null {
-    if(!localStorage.getItem("refreshToken")){
-      return null;
-    }
-
-    const refreshTokenJSON = {
-      "refreshToken": localStorage.getItem("refreshToken")
-    }
-
-    return this.http.post(environment.LOGOUT_ENDPOINT, refreshTokenJSON);
+    return this.http.post(environment.LOGOUT_ENDPOINT, {}, this.options);
   }
 }

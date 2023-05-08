@@ -3,13 +3,19 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import {indexRouter} from "./endpoints/exportEndpoints";
+import cookieParser from "cookie-parser";
 
+dotenv.config()
 const app = express();
-app.use(cors());
+const corsOptions = {
+    origin: process.env.FE_SERVER,
+    credentials: true
+};
+app.use(cors(corsOptions));
+app.use(cookieParser())
 app.use(express.json());
 app.use('/api', indexRouter)
 
-dotenv.config()
 const mongoUri:string = process.env.MONGO_URI!;
 const port:Number = +process.env.PORT!;
 
