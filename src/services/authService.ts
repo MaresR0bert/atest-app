@@ -170,6 +170,7 @@ const logOut = async (req: any, res: any) => {
     try {
         const refreshToken: JwtPayload = await verifyRefreshToken(req.cookies.refreshToken);
         await RefreshToken.deleteOne({_id: refreshToken.tokenId});
+        res.clearCookie("refreshToken");
         return responseFactory(res, 200, {status: "success"});
     } catch (err) {
         return responseFactory(res, 404, {error: err});
