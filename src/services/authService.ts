@@ -65,7 +65,8 @@ const signUp = async (req: any, res: any) => {
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        withCredentials: true
+        withCredentials: true,
+        expires: new Date(new Date().getTime() + (6 * 3600 * 1000))
     })
 
     return responseFactory(res, 200, {
@@ -116,8 +117,9 @@ const logIn = async (req: any, res: any) => {
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        withCredentials: true
-    })
+        withCredentials: true,
+        expires: new Date(new Date().getTime() + (6 * 3600 * 1000))
+    });
 
     return responseFactory(res, 200, {
         id: userDoc.id,
