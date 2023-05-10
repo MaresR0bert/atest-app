@@ -8,7 +8,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { SignupFormComponent } from './signup-form/signup-form.component';
 import {MatCardModule} from "@angular/material/card";
 import {MatFormFieldModule} from "@angular/material/form-field";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {NgOptimizedImage} from "@angular/common";
@@ -24,6 +24,7 @@ import { TeacherNavbarComponent } from './teacher-navbar/teacher-navbar.componen
 import { QuestionCrudComponent } from './question-crud/question-crud.component';
 import { QuestionListComponent } from './question-list/question-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import {QuillEditorComponent, QuillModule} from "ngx-quill";
 
 @NgModule({
   declarations: [
@@ -52,7 +53,10 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatGridListModule,
     HttpClientModule,
     MatToolbarModule,
-    MatMenuModule
+    MatMenuModule,
+    QuillEditorComponent,
+    FormsModule,
+    QuillModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

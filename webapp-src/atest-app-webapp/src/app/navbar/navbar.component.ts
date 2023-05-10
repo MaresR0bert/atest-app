@@ -12,11 +12,13 @@ export class NavbarComponent {
   }
 
   onLogout(): void {
-    this.accountService.onLogout()?.subscribe((res: any) => {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      this.router.navigateByUrl('/login');
-      console.log(res);
+    this.accountService.onLogout()?.subscribe({
+      next: (res: any) => {
+        this.router.navigateByUrl('/login');
+      },
+      error: (err) => {
+        this.router.navigateByUrl('/login');
+      }
     });
   }
 }

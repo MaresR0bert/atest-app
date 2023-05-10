@@ -1,2 +1,11 @@
 <app-teacher-navbar/>
-<p>question-crud works!</p>
+<div>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <quill-editor
+      [(ngModel)]="content"
+      [modules]="quillConfig"
+    >
+    </quill-editor>
+  </form>
+</div>
+
