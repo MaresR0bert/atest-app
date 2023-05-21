@@ -175,7 +175,17 @@ const logOut = async (req: any, res: any) => {
         res.clearCookie("refreshToken");
         return responseFactory(res, 200, {status: "success"});
     } catch (err) {
+        res.clearCookie("refreshToken");
         return responseFactory(res, 404, {error: err});
+    }
+}
+
+const authCheck = async (req: any, res: any) => {
+    try {
+        await verifyRefreshToken(req.cookies.refreshToken);
+        return responseFactory(res, 200, {"guard": true});
+    } catch (err) {
+        return responseFactory(res, 404, {"guard": false});
     }
 }
 
@@ -197,4 +207,4 @@ const verifyRefreshToken = async (token: string): Promise<JwtPayload> => {
     }
 }
 
-export default {signUp, logIn, newRefreshToken, newAccessToken, logOut};
+export default {signUp, logIn, newRefreshToken, newAccessToken, logOut, authCheck};

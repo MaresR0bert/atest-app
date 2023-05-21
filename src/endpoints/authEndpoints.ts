@@ -8,5 +8,6 @@ router.post("/login", authService.logIn);
 router.post("/logout", authService.logOut);
 router.post("/accessToken", authService.newAccessToken);
 router.post("/refreshToken", authService.newRefreshToken);
+router.get("/check", authService.authCheck);
 
 export default router;

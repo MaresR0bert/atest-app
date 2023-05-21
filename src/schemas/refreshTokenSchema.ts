@@ -8,6 +8,8 @@ const refreshTokenSchema = new Schema({
     timestamps: true
 });
 
+refreshTokenSchema.index({createdAt: 1}, {expireAfterSeconds: 21600});
+
 const RefreshToken = model("refreshToken", refreshTokenSchema);
 
 export default RefreshToken;
