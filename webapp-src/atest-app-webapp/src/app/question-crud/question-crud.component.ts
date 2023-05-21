@@ -20,19 +20,13 @@ export class QuestionCrudComponent {
         ['code-block'],
         [{ 'header': 1 }, { 'header': 2 }],               // custom button values
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-
-        ['link'],
         ['image']
-        //['link', 'image', 'video']
       ],
 
-    },
-    "emoji-toolbar": false,
-    "emoji-textarea": true,
-    "emoji-shortname": true,
+    }
   }
 
   submit():void {
-
+    console.log(this.form.get("questionBody")?.value);
   }
 }

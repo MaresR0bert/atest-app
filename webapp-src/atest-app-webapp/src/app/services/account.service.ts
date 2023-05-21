@@ -26,4 +26,8 @@ export class AccountService {
   onLogout(): Observable<any> | null {
     return this.http.post(environment.LOGOUT_ENDPOINT, {}, this.options);
   }
+
+  onAuthCheck(): boolean {
+    return true;
+  }
 }

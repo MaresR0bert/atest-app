@@ -7,10 +7,11 @@ import {TeacherDashboardComponent} from "./teacher-dashboard/teacher-dashboard.c
 import {QuestionCrudComponent} from "./question-crud/question-crud.component";
 import {QuestionListComponent} from "./question-list/question-list.component";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
+import {authGuard} from "./guards/auth.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch:'full'},
-  {path: 'login', component: LoginFormComponent, pathMatch: 'full'},
+  {path: 'login', component: LoginFormComponent, pathMatch: 'full', canActivate: [authGuard]},
   {path: 'signup', component: SignupFormComponent, pathMatch: 'full'},
   {path: 'dashboard', component: DashboardComponent, pathMatch: 'full'},
   {path: 'teacher', component: TeacherDashboardComponent, pathMatch: 'full'},
