@@ -189,6 +189,21 @@ const authCheck = async (req: any, res: any) => {
     }
 }
 
+const teacherCheck = async (req: any, res: any) => {
+    try {
+        const refreshToken: JwtPayload = await verifyRefreshToken(req.cookies.refreshToken);
+        const user = await User.findById(refreshToken.userId).select("+role").exec();
+        logger.info(user?.role);
+        if(user?.role === "ROLE_PROF"){
+            return responseFactory(res, 200, {"guard": true});
+        } else {
+            return responseFactory(res, 404, {"guard": false});
+        }
+    } catch (err) {
+        return responseFactory(res, 404, {"guard": false});
+    }
+}
+
 const verifyRefreshToken = async (token: string): Promise<JwtPayload> => {
     const decodeToken = () : JwtPayload => {
         try{
@@ -207,4 +222,4 @@ const verifyRefreshToken = async (token: string): Promise<JwtPayload> => {
     }
 }
 
-export default {signUp, logIn, newRefreshToken, newAccessToken, logOut, authCheck};
+export default {signUp, logIn, newRefreshToken, newAccessToken, logOut, authCheck, teacherCheck};

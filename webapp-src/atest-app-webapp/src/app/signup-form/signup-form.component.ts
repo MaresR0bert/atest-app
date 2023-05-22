@@ -36,8 +36,6 @@ export class SignupFormComponent {
     }
 
     this.accountService.onSignup(userSignup).subscribe((res: any) => {
-      //localStorage.setItem('refreshToken', res.refreshToken);
-      console.log(res);
       this.router.navigateByUrl('/dashboard');
     })
   }

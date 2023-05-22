@@ -8,7 +8,6 @@ export const loginGuard: CanActivateFn = (route, state): boolean | Observable<bo
   const router = inject(Router);
   return authService.onAuthCheck().pipe(
     tap(data => {
-      //console.log(!data)
       router.navigateByUrl("/teacher");
       return !data;
     }),

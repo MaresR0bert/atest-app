@@ -30,4 +30,8 @@ export class AccountService {
   onAuthCheck(): Observable<any> {
     return this.http.get(environment.AUTHCHECK_ENDPOINT, this.options);
   }
+
+  onTeacherCheck(): Observable<any> {
+    return this.http.get(environment.TEACHERCHECK_ENDPOINT, this.options);
+  }
 }

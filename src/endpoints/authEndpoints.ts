@@ -9,5 +9,6 @@ router.post("/logout", authService.logOut);
 router.post("/accessToken", authService.newAccessToken);
 router.post("/refreshToken", authService.newRefreshToken);
 router.get("/check", authService.authCheck);
+router.get("/teachercheck", authService.teacherCheck);
 
 export default router;

@@ -31,7 +31,6 @@ export class LoginFormComponent {
       user.username = "john455@mail.com";
       user.password = "@F23fjjs233";
     }
-    console.log(JSON.stringify(user));
     this.accountService.onLogin(user).subscribe({
       next: (res: any) => {
         //localStorage.setItem('refreshToken', res.refreshToken);

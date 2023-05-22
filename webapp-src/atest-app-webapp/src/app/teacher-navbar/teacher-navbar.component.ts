@@ -14,9 +14,7 @@ export class TeacherNavbarComponent {
   onLogout(): void {
     this.accountService.onLogout()?.subscribe({
       next: (res: any) => {
-        //localStorage.removeItem('refreshToken');
         this.router.navigateByUrl('/login');
-        console.log(res);
       },
       error: (err) => {
         this.router.navigateByUrl('/login');

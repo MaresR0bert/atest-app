@@ -22,7 +22,6 @@ export class QuestionCrudComponent {
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
         ['image']
       ],
-
     }
   }
 
