@@ -25,6 +25,9 @@ import { QuestionCrudComponent } from './question-crud/question-crud.component';
 import { QuestionListComponent } from './question-list/question-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import {QuillEditorComponent, QuillModule} from "ngx-quill";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatSliderModule} from "@angular/material/slider";
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -57,6 +60,9 @@ import {QuillEditorComponent, QuillModule} from "ngx-quill";
     QuillEditorComponent,
     FormsModule,
     QuillModule.forRoot(),
+    MatSnackBarModule,
+    MatSliderModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

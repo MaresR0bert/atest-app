@@ -18,3 +18,7 @@ quill-editor{
 data-cell {
   padding-right: 100px;
 }
+
+.form-field {
+  width: 100%;
+}
