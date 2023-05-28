@@ -29,11 +29,15 @@ export class QuestionCrudComponent implements OnInit{
       container: [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['code-block'],
-        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+        [{ 'header': 2 }],               // custom button values
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
         ['image']
       ],
     }
+  }
+
+  displayQuillConfig={
+    toolbar: false
   }
 
   submit():void {

@@ -55,7 +55,13 @@
           <mat-expansion-panel *ngFor="let question of questionList">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                {{question.questionBody}} - Difficulty: {{question.difficulty}}
+                <quill-editor
+                  [modules]="displayQuillConfig"
+                  [readOnly]="true"
+                  [(ngModel)]="question.questionBody"
+                  id="displayQuillConfig"
+                >
+                </quill-editor>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-label>Right Answers:</mat-label>

@@ -1,5 +1,10 @@
 quill-editor{
   background-color: white;
+  max-width: 630px;
+}
+
+.displayQuillConfig {
+  max-width: 630px;
 }
 
 .form-field-title{
