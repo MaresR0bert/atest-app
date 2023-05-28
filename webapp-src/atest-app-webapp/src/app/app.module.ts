@@ -28,6 +28,7 @@ import {QuillEditorComponent, QuillModule} from "ngx-quill";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatSliderModule} from "@angular/material/slider";
 import {MatExpansionModule} from "@angular/material/expansion";
+import { ExamComponent } from './exam/exam.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
     TeacherNavbarComponent,
     QuestionCrudComponent,
     QuestionListComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ExamComponent
   ],
   imports: [
     BrowserModule,
