@@ -1,0 +1,21 @@
+<div>
+  <mat-card>
+    <div class="quiz">
+      <h1>Quiz</h1>
+
+      <!-- Display the current question -->
+      <p>{{questions[currentQuestion].text}}</p>
+
+      <!-- Display the choices for the current question as radio buttons -->
+      <form>
+        <div *ngFor="let choice of questions[currentQuestion].choices; index as i">
+          <input type="radio" name="choice" [value]="i" (change)="selectAnswer(i)"> {{choice}}
+        </div>
+      </form>
+
+      <button *ngIf="currentQuestion === questions.length - 1" (click)="finishQuiz()">Finish Quiz</button>
+
+      <button *ngIf="currentQuestion < questions.length - 1" (click)="incrementCurrentQuestion"> Next</button>
+    </div>
+  </mat-card>
+</div>

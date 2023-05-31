@@ -132,7 +132,7 @@ const logIn = async (req: any, res: any) => {
 const newRefreshToken = async (req: any, res: any) => {
 
     try {
-        const currentRefreshToken: JwtPayload = await verifyRefreshToken(req.body.refreshToken);
+        const currentRefreshToken: JwtPayload = await verifyRefreshToken(req.cookies.refreshToken);
         const refreshTokenDoc = new RefreshToken({
             owner: currentRefreshToken.userId
         })
@@ -155,13 +155,13 @@ const newRefreshToken = async (req: any, res: any) => {
 
 const newAccessToken = async (req: any, res: any) => {
     try {
-        const refreshToken: JwtPayload = await verifyRefreshToken(req.body.refreshToken);
+        const refreshToken: JwtPayload = await verifyRefreshToken(req.cookies.refreshToken);
         const accessToken = createAccessToken(refreshToken.userId);
 
         return responseFactory(res, 200, {
             id: refreshToken.userId,
             accessToken,
-            refreshToken: req.body.refreshToken
+            refreshToken: req.cookies.refreshToken
         });
     } catch (err) {
         return responseFactory(res, 401, {error: err});

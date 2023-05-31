@@ -29,6 +29,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatSliderModule} from "@angular/material/slider";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { ExamComponent } from './exam/exam.component';
+import { MultipleChoiceComponent } from './multiple-choice/multiple-choice.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { ExamComponent } from './exam/exam.component';
     QuestionCrudComponent,
     QuestionListComponent,
     PageNotFoundComponent,
-    ExamComponent
+    ExamComponent,
+    MultipleChoiceComponent
   ],
   imports: [
     BrowserModule,
