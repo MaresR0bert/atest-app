@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {AccountService} from "../services/account.service";
+import {Question} from "../../models/question.model";
+import {QuestionService} from "../services/question.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-question-crud',
@@ -8,8 +12,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   styleUrls: ['./question-crud.component.css']
 })
 export class QuestionCrudComponent implements OnInit{
-  content: string
-  questionList: any[] = []
+  content: string;
+  questionList: Question[] = [];
+  localToken: string;
   form: FormGroup = new FormGroup({
     questionBody: new FormControl(''),
     rightAnswers: new FormControl(''),
@@ -17,10 +22,21 @@ export class QuestionCrudComponent implements OnInit{
     difficulty: new FormControl(1)
   });
 
-  constructor(private matSnackBar: MatSnackBar) {
+  constructor(private matSnackBar: MatSnackBar,
+              private accountService: AccountService,
+              private questionService: QuestionService,
+              private router: Router) {
   }
 
   ngOnInit() {
+    this.accountService.onRefreshAccessToken().subscribe({
+      next: (res: any) => {
+        this.localToken = res.accessToken;
+      },
+      error: (err) => {
+        this.router.navigateByUrl("/404");
+      }
+    })
   }
 
   quillConfig={
@@ -52,12 +68,18 @@ export class QuestionCrudComponent implements OnInit{
       this.matSnackBar.open("Question added successfully", "OK", {
         duration:3000
       });
-      this.questionList.push({
+      const currentQuestion: Question = {
         questionBody: this.form.get("questionBody")?.value,
         rightAnswers: this.form.get("rightAnswers")?.value.split("\n"),
         wrongAnswers: this.form.get("wrongAnswers")?.value.split("\n"),
         difficulty: this.form.get("difficulty")?.value
+      }
+      this.questionService.addQuestion(currentQuestion).subscribe({
+        next: () => {
+
+        }
       })
+      this.questionList.push(currentQuestion);
     }
   }
 }

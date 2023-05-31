@@ -34,4 +34,8 @@ export class AccountService {
   onTeacherCheck(): Observable<any> {
     return this.http.get(environment.TEACHERCHECK_ENDPOINT, this.options);
   }
+
+  onRefreshAccessToken(): Observable<any> {
+    return this.http.post(environment.REFRESHACCESSTOKEN_ENDPOINT, {}, this.options);
+  }
 }
