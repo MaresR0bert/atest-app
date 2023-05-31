@@ -8,13 +8,15 @@ import {environment} from "../../environments/environment.development";
   providedIn: 'root'
 })
 export class QuestionService {
-
-  options = {
-    withCredentials: true
-  }
   constructor(private http: HttpClient) { }
 
-  addQuestion(question: Question): Observable<any> {
-    return this.http.post(environment.ADD_QUESTION_ENDPOINT, question, this.options);
+  addQuestion(question: Question, token: string): Observable<any> {
+    const options = {
+      withCredentials: true,
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+    return this.http.post(environment.ADD_QUESTION_ENDPOINT, question, options);
   }
 }

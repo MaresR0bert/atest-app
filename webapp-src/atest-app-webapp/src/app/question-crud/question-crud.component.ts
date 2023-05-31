@@ -65,20 +65,27 @@ export class QuestionCrudComponent implements OnInit{
       });
       return;
     } else {
-      this.matSnackBar.open("Question added successfully", "OK", {
-        duration:3000
-      });
       const currentQuestion: Question = {
         questionBody: this.form.get("questionBody")?.value,
         rightAnswers: this.form.get("rightAnswers")?.value.split("\n"),
         wrongAnswers: this.form.get("wrongAnswers")?.value.split("\n"),
         difficulty: this.form.get("difficulty")?.value
       }
-      this.questionService.addQuestion(currentQuestion).subscribe({
+      this.questionService.addQuestion(currentQuestion, this.localToken).subscribe({
         next: () => {
-
+          this.matSnackBar.open("Question added successfully", "OK", {
+            duration:3000
+          });
+        },
+        error: () => {
+          const matSnackBarREF = this.matSnackBar.open("ERROR: Question creation failed, Session Expired", "REFRESH");
+          matSnackBarREF.afterDismissed().subscribe({
+            next: () => {
+              window.location.reload();
+            }
+          });
         }
-      })
+      });
       this.questionList.push(currentQuestion);
     }
   }
