@@ -33,7 +33,32 @@ export class LoginFormComponent {
     }
     this.accountService.onLogin(user).subscribe({
       next: (res: any) => {
-        //localStorage.setItem('refreshToken', res.refreshToken);
+        if (res.role === environment.ROLE_STUDENT) {
+          this.router.navigateByUrl('/dashboard');
+        } else if (res.role === environment.ROLE_PROF) {
+          this.router.navigateByUrl('/teacher');
+        } else {
+          //localStorage.removeItem('refreshToken');
+          this.error = "Malformed Payload!";
+        }
+      },
+      error: (err) => {
+        this.error = err.error.error;
+      }
+    });
+  }
+
+  submitStudent(): void{
+    let user: User = {
+      username: this.form.get("username")?.value,
+      password: this.form.get("password")?.value
+    }
+    if(this.form.get("username")?.value === ""){
+      user.username = "john555@mail.com";
+      user.password = "@F23fjjs233";
+    }
+    this.accountService.onLogin(user).subscribe({
+      next: (res: any) => {
         if (res.role === environment.ROLE_STUDENT) {
           this.router.navigateByUrl('/dashboard');
         } else if (res.role === environment.ROLE_PROF) {
