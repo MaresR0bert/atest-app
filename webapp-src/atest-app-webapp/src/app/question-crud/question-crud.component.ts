@@ -5,6 +5,8 @@ import {AccountService} from "../services/account.service";
 import {Question} from "../../models/question.model";
 import {QuestionService} from "../services/question.service";
 import {Router} from "@angular/router";
+import * as CryptoJS from 'crypto-js';
+import {environment} from "../../environments/environment.development";
 
 @Component({
   selector: 'app-question-crud',
@@ -53,6 +55,7 @@ export class QuestionCrudComponent implements OnInit{
   }
 
   displayQuillConfig={
+    syntax: true,
     toolbar: false
   }
 
@@ -71,7 +74,10 @@ export class QuestionCrudComponent implements OnInit{
         wrongAnswers: this.form.get("wrongAnswers")?.value.split("\n"),
         difficulty: this.form.get("difficulty")?.value
       }
-      this.questionService.addQuestion(currentQuestion, this.localToken).subscribe({
+      const encryptedQuestion = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(currentQuestion),
+        environment.AES_ENCRYPTION_KEY).toString());
+
+      this.questionService.addQuestion(encryptedQuestion, this.localToken).subscribe({
         next: () => {
           this.matSnackBar.open("Question added successfully", "OK", {
             duration:3000
