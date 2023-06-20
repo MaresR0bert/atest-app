@@ -1,4 +1,3 @@
-import logger from "../util/logger";
 import responseFactory from "../util/responseFactory";
 import * as CryptoJS from "crypto-js";
 import Question from "../schemas/questionSchema";
@@ -19,4 +18,9 @@ const addQuestion = async (req: any, res: any) => {
     return responseFactory(res, 200, {});
 }
 
-export default {addQuestion}
+const getQuestions = async (req: any, res: any) => {
+    const questions: any = await Question.find({owner: res.locals.userId}).exec();
+    return responseFactory(res, 200, questions);
+}
+
+export default {addQuestion, getQuestions}

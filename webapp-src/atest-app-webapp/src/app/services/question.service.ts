@@ -18,4 +18,14 @@ export class QuestionService {
     }
     return this.http.post(environment.ADD_QUESTION_ENDPOINT, {"payload": encryptedQuestion}, options);
   }
+
+  getQuestions(token: string): Observable<any> {
+    const options = {
+      withCredentials: true,
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+    return this.http.get(environment.GET_QUESTIONS_ENDPOINT, options);
+  }
 }

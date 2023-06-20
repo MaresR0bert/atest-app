@@ -34,6 +34,14 @@ export class QuestionCrudComponent implements OnInit{
     this.accountService.onRefreshAccessToken().subscribe({
       next: (res: any) => {
         this.localToken = res.accessToken;
+        this.questionService.getQuestions(this.localToken).subscribe({
+          next: (res: any) => {
+            res.forEach((elem: any) => this.questionList.push(elem));
+          },
+          error: (err) => {
+            this.router.navigateByUrl("/404");
+          }
+        });
       },
       error: (err) => {
         this.router.navigateByUrl("/404");
@@ -82,6 +90,15 @@ export class QuestionCrudComponent implements OnInit{
           this.matSnackBar.open("Question added successfully", "OK", {
             duration:3000
           });
+          this.questionService.getQuestions(this.localToken).subscribe({
+            next: (res: any) => {
+              this.questionList = [];
+              res.forEach((elem: any) => this.questionList.push(elem));
+            },
+            error: (err) => {
+              this.router.navigateByUrl("/404");
+            }
+          });
         },
         error: () => {
           const matSnackBarREF = this.matSnackBar.open("ERROR: Question creation failed, Session Expired", "REFRESH");
@@ -92,7 +109,6 @@ export class QuestionCrudComponent implements OnInit{
           });
         }
       });
-      this.questionList.push(currentQuestion);
     }
   }
 }
