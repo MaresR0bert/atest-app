@@ -25,4 +25,8 @@ export class TeacherNavbarComponent {
   createButtonHandler(): void {
     this.router.navigateByUrl('/question/create');
   }
+
+  testCreationButtonHandler(): void {
+    this.router.navigateByUrl('/test/create');
+  }
 }

@@ -12,6 +12,7 @@ import {loginGuard} from "./guards/login.guard";
 import {teacherGuard} from "./guards/teacher.guard";
 import {studentGuard} from "./guards/student.guard";
 import {ExamComponent} from "./exam/exam.component";
+import {TestCreationComponent} from "./test-creation/test-creation.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'teacher', pathMatch:'full'},
@@ -21,6 +22,7 @@ const routes: Routes = [
   {path: 'exam/:id', component: ExamComponent, pathMatch: 'full', canActivate:[authGuard, studentGuard]},
   {path: 'teacher', component: TeacherDashboardComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},
   {path: "question/create", component: QuestionCrudComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},
+  {path: "test/create", component: TestCreationComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},
   {path: "question/list", component: QuestionListComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},
   {path: "404", component: PageNotFoundComponent, pathMatch: 'full'},
   {path: "**", redirectTo: '404'}

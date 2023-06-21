@@ -30,6 +30,7 @@ import {MatSliderModule} from "@angular/material/slider";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { ExamComponent } from './exam/exam.component';
 import { MultipleChoiceComponent } from './multiple-choice/multiple-choice.component';
+import { TestCreationComponent } from './test-creation/test-creation.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { MultipleChoiceComponent } from './multiple-choice/multiple-choice.compo
     QuestionListComponent,
     PageNotFoundComponent,
     ExamComponent,
-    MultipleChoiceComponent
+    MultipleChoiceComponent,
+    TestCreationComponent
   ],
   imports: [
     BrowserModule,
