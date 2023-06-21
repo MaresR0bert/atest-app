@@ -7,6 +7,7 @@ import {QuestionService} from "../services/question.service";
 import {Router} from "@angular/router";
 import * as CryptoJS from 'crypto-js';
 import {environment} from "../../environments/environment.development";
+import {switchMap} from "rxjs";
 
 @Component({
   selector: 'app-question-crud',
@@ -30,23 +31,17 @@ export class QuestionCrudComponent implements OnInit{
               private router: Router) {
   }
 
-  ngOnInit() {
-    this.accountService.onRefreshAccessToken().subscribe({
-      next: (res: any) => {
-        this.localToken = res.accessToken;
-        this.questionService.getQuestions(this.localToken).subscribe({
-          next: (res: any) => {
-            res.forEach((elem: any) => this.questionList.push(elem));
-          },
-          error: (err) => {
-            this.router.navigateByUrl("/404");
-          }
-        });
-      },
-      error: (err) => {
-        this.router.navigateByUrl("/404");
-      }
-    })
+  ngOnInit(): void {
+    this.accountService.onRefreshAccessToken().pipe(
+      switchMap((token: any) => {
+        this.localToken = token.accessToken;
+        return this.questionService.getQuestions(this.localToken);
+      })
+    ).subscribe((questions: any) => {
+      questions.forEach((question: any) => this.questionList.push(question));
+    }), (err: any) => {
+      this.router.navigateByUrl("/404");
+    }
   }
 
   quillConfig={
@@ -85,30 +80,24 @@ export class QuestionCrudComponent implements OnInit{
       const encryptedQuestion = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(currentQuestion),
         environment.AES_ENCRYPTION_KEY).toString());
 
-      this.questionService.addQuestion(encryptedQuestion, this.localToken).subscribe({
-        next: () => {
+      this.questionService.addQuestion(encryptedQuestion, this.localToken).pipe(
+        switchMap(() => {
           this.matSnackBar.open("Question added successfully", "OK", {
             duration:3000
           });
-          this.questionService.getQuestions(this.localToken).subscribe({
-            next: (res: any) => {
-              this.questionList = [];
-              res.forEach((elem: any) => this.questionList.push(elem));
-            },
-            error: (err) => {
-              this.router.navigateByUrl("/404");
-            }
-          });
-        },
-        error: () => {
-          const matSnackBarREF = this.matSnackBar.open("ERROR: Question creation failed, Session Expired", "REFRESH");
-          matSnackBarREF.afterDismissed().subscribe({
-            next: () => {
-              window.location.reload();
-            }
-          });
-        }
-      });
+          return this.questionService.getQuestions(this.localToken);
+        })
+      ).subscribe((questions: any) => {
+        this.questionList = [];
+        questions.forEach((question: any) => this.questionList.push(question));
+      }), (err: any) => {
+        const matSnackBarREF = this.matSnackBar.open("ERROR: Question creation failed, Session Expired", "REFRESH");
+        matSnackBarREF.afterDismissed().subscribe({
+          next: () => {
+            window.location.reload();
+          }
+        });
+      }
     }
   }
 }
