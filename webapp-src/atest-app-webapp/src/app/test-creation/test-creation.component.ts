@@ -3,6 +3,7 @@ import {AccountService} from "../services/account.service";
 import {switchMap} from "rxjs";
 import {QuestionService} from "../services/question.service";
 import {Router} from "@angular/router";
+import Utils from "../Utils/utils";
 
 @Component({
   selector: 'app-test-creation',
@@ -16,17 +17,19 @@ export class TestCreationComponent implements OnInit{
 
   constructor(private accountService: AccountService, private questionService: QuestionService, private router: Router) {
   }
+
   ngOnInit(): void {
     this.accountService.onRefreshAccessToken().pipe(
       switchMap((token: any) => {
-        this.localToken = token;
+        this.localToken = token.accessToken;
         return this.questionService.getQuestions(this.localToken);
       })
-    ).subscribe((questions: any) => {
-      questions.forEach((question: any) => this.questionList.push(question));
+    ).subscribe((encryptedQuestions: any) => {
+      encryptedQuestions.forEach((encryptedQuestion: any) => {
+        this.questionList.push(Utils.decryptQuestion(encryptedQuestion));
+      });
     }), (err: any) => {
       this.router.navigateByUrl("/404");
     }
   }
-
 }

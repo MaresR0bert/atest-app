@@ -5,9 +5,8 @@ import {AccountService} from "../services/account.service";
 import {Question} from "../../models/question.model";
 import {QuestionService} from "../services/question.service";
 import {Router} from "@angular/router";
-import * as CryptoJS from 'crypto-js';
-import {environment} from "../../environments/environment.development";
 import {switchMap} from "rxjs";
+import Utils from "../Utils/utils";
 
 @Component({
   selector: 'app-question-crud',
@@ -37,8 +36,10 @@ export class QuestionCrudComponent implements OnInit{
         this.localToken = token.accessToken;
         return this.questionService.getQuestions(this.localToken);
       })
-    ).subscribe((questions: any) => {
-      questions.forEach((question: any) => this.questionList.push(question));
+    ).subscribe((encryptedQuestions: any) => {
+      encryptedQuestions.forEach((encryptedQuestion: any) => {
+        this.questionList.push(Utils.decryptQuestion(encryptedQuestion));
+      });
     }), (err: any) => {
       this.router.navigateByUrl("/404");
     }
@@ -77,8 +78,7 @@ export class QuestionCrudComponent implements OnInit{
         wrongAnswers: this.form.get("wrongAnswers")?.value.split("\n"),
         difficulty: this.form.get("difficulty")?.value
       }
-      const encryptedQuestion = encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify(currentQuestion),
-        environment.AES_ENCRYPTION_KEY).toString());
+      const encryptedQuestion: string = Utils.encryptQuestion(currentQuestion);
 
       this.questionService.addQuestion(encryptedQuestion, this.localToken).pipe(
         switchMap(() => {
@@ -87,9 +87,11 @@ export class QuestionCrudComponent implements OnInit{
           });
           return this.questionService.getQuestions(this.localToken);
         })
-      ).subscribe((questions: any) => {
+      ).subscribe((encryptedQuestions: any) => {
         this.questionList = [];
-        questions.forEach((question: any) => this.questionList.push(question));
+        encryptedQuestions.forEach((encryptedQuestion: any) => {
+          this.questionList.push(Utils.decryptQuestion(encryptedQuestion));
+        })
       }), (err: any) => {
         const matSnackBarREF = this.matSnackBar.open("ERROR: Question creation failed, Session Expired", "REFRESH");
         matSnackBarREF.afterDismissed().subscribe({

@@ -8,6 +8,12 @@ const decryptQuestion = (encryptedQuestion: string): any => {
     return JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
 }
 
+const encryptQuestion = (question: any): any => {
+    return encodeURIComponent(
+        CryptoJS.AES.encrypt(JSON.stringify(question), process.env.AES_ENCRYPTION_KEY!).toString()
+    );
+}
+
 const addQuestion = async (req: any, res: any) => {
     let question = decryptQuestion(req.body.payload);
     Object.assign(question, {owner: res.locals.userId});
@@ -20,7 +26,11 @@ const addQuestion = async (req: any, res: any) => {
 
 const getQuestions = async (req: any, res: any) => {
     const questions: any = await Question.find({owner: res.locals.userId}).exec();
-    return responseFactory(res, 200, questions);
+    let encryptedQuestions: any[] = [];
+    questions.forEach((question: any) => {
+        encryptedQuestions.push(encryptQuestion(question));
+    })
+    return responseFactory(res, 200, encryptedQuestions);
 }
 
 export default {addQuestion, getQuestions}
