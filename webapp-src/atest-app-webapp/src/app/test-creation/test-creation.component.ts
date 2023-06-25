@@ -5,6 +5,7 @@ import {QuestionService} from "../services/question.service";
 import {Router} from "@angular/router";
 import Utils from "../Utils/utils";
 import {FormControl, FormGroup} from "@angular/forms";
+import {TestService} from "../services/test.service";
 
 @Component({
   selector: 'app-test-creation',
@@ -21,7 +22,12 @@ export class TestCreationComponent implements OnInit{
     testCode: new FormControl('')
   });
 
-  constructor(private accountService: AccountService, private questionService: QuestionService, private router: Router) {
+  constructor(
+    private accountService: AccountService,
+    private questionService: QuestionService,
+    private router: Router,
+    private testService: TestService
+  ) {
   }
 
   displayQuillConfig={
@@ -53,7 +59,7 @@ export class TestCreationComponent implements OnInit{
         testCode: this.form.get('testCode')?.value,
         selectedQuestionArray: this.selectedQuestionsList.map((question: any) => question._id)
       };
-      console.log(createdTest);
+      this.testService.addTest(createdTest, this.localToken);
     }
   }
 
