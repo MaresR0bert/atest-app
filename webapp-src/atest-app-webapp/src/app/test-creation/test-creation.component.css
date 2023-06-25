@@ -28,3 +28,14 @@ quill-editor{
 .testCreationForm {
   padding: 35px
 }
+
+.error {
+  padding: 12px;
+  width: 375px;
+  color: white;
+  background-color: crimson;
+  text-align: center;
+  font-weight: bold;
+  margin: 30px;
+  justify-content: center;
+}

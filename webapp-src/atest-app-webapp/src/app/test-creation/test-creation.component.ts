@@ -46,7 +46,15 @@ export class TestCreationComponent implements OnInit{
   }
 
   submit(){
-    alert(this.form.get('testCode')?.value);
+    if(this.form.get('testCode')?.errors){
+      this.error = "Please insert test Code";
+    } else {
+      const createdTest = {
+        testCode: this.form.get('testCode')?.value,
+        selectedQuestionArray: this.selectedQuestionsList.map((question: any) => question._id)
+      };
+      console.log(createdTest);
+    }
   }
 
   move = (id: string) => {
