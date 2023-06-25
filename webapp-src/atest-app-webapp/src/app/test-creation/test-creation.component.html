@@ -1,12 +1,128 @@
 <app-teacher-navbar/>
+<div class="host">
+  <mat-card>
+    <div class="testCreationForm">
+      <mat-card-title>Create Test:</mat-card-title>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <p *ngIf="error" class="error">
+          {{ error }}
+        </p>
+        <br/>
+        <p class="roomCode">
+          <mat-form-field [style.width.px]=400 appearance="outline">
+            <mat-label>Test Code</mat-label>
+            <input type="text" matInput placeholder="Test Code" formControlName="testCode">
+          </mat-form-field>
+        </p>
+        <div class="button">
+          <button type="submit" mat-flat-button color="primary">Create Test</button>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>
+<br>
 <table class="center">
   <tr>
     <td>
-
+      <mat-card>
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let question of questionList">
+            <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+              <mat-panel-title>
+                <quill-editor
+                  [modules]="displayQuillConfig"
+                  [readOnly]="true"
+                  [(ngModel)]="question.questionBody"
+                  id="displayQuillConfig"
+                >
+                </quill-editor>
+                <span class="example-spacer"></span>
+                <button class="form-field" mat-flat-button color="primary" (click)="move(question._id)">
+                  <mat-icon>trending_flat</mat-icon>
+                </button>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-label>Right Answers:</mat-label>
+            <ul>
+              <li *ngFor="let answer of question.rightAnswers">
+                {{answer}}
+              </li>
+            </ul>
+            <br/>
+            <mat-label>Wrong Answers:</mat-label>
+            <ul>
+              <li *ngFor="let answer of question.wrongAnswers">
+                {{answer}}
+              </li>
+            </ul>
+            <mat-label>Difficulty: {{question.difficulty}}</mat-label>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card>
     </td>
-    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>
-
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button
+        class="form-field" mat-flat-button
+        color="primary"
+        (click)="moveAll()"
+        *ngIf="questionList.length"
+      >
+        <mat-icon>
+          label_important
+        </mat-icon>
+      </button>
+      <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button
+        class="form-field" mat-flat-button
+        color="primary"
+        (click)="removeAll()"
+        *ngIf="selectedQuestionsList.length"
+      >
+        <mat-icon>
+          remove_circle_outline
+        </mat-icon>
+      </button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+    <td>
+      <mat-card>
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let question of selectedQuestionsList">
+            <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+              <mat-panel-title>
+                <quill-editor
+                  [modules]="displayQuillConfig"
+                  [readOnly]="true"
+                  [(ngModel)]="question.questionBody"
+                  id="displayQuillConfig2"
+                >
+                </quill-editor>
+                <span class="example-spacer"></span>
+                <button class="form-field" mat-flat-button color="primary" (click)="remove(question._id)">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-label>Right Answers:</mat-label>
+            <ul>
+              <li *ngFor="let answer of question.rightAnswers">
+                {{answer}}
+              </li>
+            </ul>
+            <br/>
+            <mat-label>Wrong Answers:</mat-label>
+            <ul>
+              <li *ngFor="let answer of question.wrongAnswers">
+                {{answer}}
+              </li>
+            </ul>
+            <mat-label>Difficulty: {{question.difficulty}}</mat-label>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card>
     </td>
   </tr>
 </table>

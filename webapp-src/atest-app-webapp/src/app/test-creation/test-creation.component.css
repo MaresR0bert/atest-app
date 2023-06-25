@@ -2,3 +2,29 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+quill-editor{
+  background-color: white;
+  max-width: 630px;
+}
+
+#displayQuillConfig {
+  max-width: 630px;
+}
+
+#displayQuillConfig2 {
+  max-width: 630px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.host {
+  display: flex;
+  justify-content: center;
+}
+
+.testCreationForm {
+  padding: 35px
+}

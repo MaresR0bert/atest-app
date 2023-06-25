@@ -13,4 +13,14 @@ export default class Utils {
     );
     return JSON.parse(decryptedQuestion.toString(CryptoJS.enc.Utf8));
   }
+
+  static compareQuestionsByCreateDate = (q1: any, q2: any) => {
+    if (q1.createdAt < q2.createdAt) {
+      return -1;
+    }
+    if (q1.createdAt > q2.createdAt) {
+      return 1;
+    }
+    return 0;
+  }
 }
