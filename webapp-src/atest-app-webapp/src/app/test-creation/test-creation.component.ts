@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import Utils from "../Utils/utils";
 import {FormControl, FormGroup} from "@angular/forms";
 import {TestService} from "../services/test.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-test-creation',
@@ -23,6 +24,7 @@ export class TestCreationComponent implements OnInit{
   });
 
   constructor(
+    private matSnackBar: MatSnackBar,
     private accountService: AccountService,
     private questionService: QuestionService,
     private router: Router,
@@ -57,9 +59,17 @@ export class TestCreationComponent implements OnInit{
     } else {
       const createdTest = {
         testCode: this.form.get('testCode')?.value,
-        selectedQuestionArray: this.selectedQuestionsList.map((question: any) => question._id)
+        questions: this.selectedQuestionsList.map((question: any) => question._id)
       };
-      this.testService.addTest(createdTest, this.localToken);
+      this.testService.addTest(createdTest, this.localToken).subscribe((res)=>{
+        const matSnackBarREF =
+          this.matSnackBar.open("Test created! Manage tests in Test Viewer", "GO");
+        matSnackBarREF.afterDismissed().subscribe({
+          next: () => {
+            this.router.navigateByUrl("/teacher");
+          }
+        });
+      });
     }
   }
 
