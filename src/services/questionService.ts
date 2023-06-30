@@ -1,18 +1,6 @@
 import responseFactory from "../util/responseFactory";
-import * as CryptoJS from "crypto-js";
+import {decryptQuestion, encryptQuestion} from "../util/questionEncryption"
 import Question from "../schemas/questionSchema";
-
-const decryptQuestion = (encryptedQuestion: string): any => {
-    const decryptedData =
-        CryptoJS.AES.decrypt(decodeURIComponent(encryptedQuestion), process.env.AES_ENCRYPTION_KEY!);
-    return JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
-}
-
-const encryptQuestion = (question: any): any => {
-    return encodeURIComponent(
-        CryptoJS.AES.encrypt(JSON.stringify(question), process.env.AES_ENCRYPTION_KEY!).toString()
-    );
-}
 
 const addQuestion = async (req: any, res: any) => {
     let question = decryptQuestion(req.body.payload);

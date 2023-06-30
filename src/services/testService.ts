@@ -1,5 +1,6 @@
 import responseFactory from "../util/responseFactory";
 import Test from "../schemas/testSchema";
+import {encryptQuestion} from "../util/questionEncryption";
 
 const addTest = async (req: any, res: any) => {
     const newTest = JSON.parse(JSON.stringify(req.body));
@@ -11,4 +12,17 @@ const addTest = async (req: any, res: any) => {
     return responseFactory(res, 200, {});
 }
 
-export default {addTest}
+const startTest = async (req: any, res: any) => {
+
+    const question = {
+        "questionBody":"<p>fdsafsdafsdgdsag</p>",
+        "answers":["gdsgdg","gdgdgd"],
+        "isMultiple": false
+    }
+
+    const encryptedQuestion = encryptQuestion(question)
+
+    return responseFactory(res, 200, encryptedQuestion);
+}
+
+export default {addTest, startTest}

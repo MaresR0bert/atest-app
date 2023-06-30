@@ -1,21 +1,35 @@
-<div>
+<div *ngIf="!this.question" class="quiz">
+  <mat-card>
+    <h1>Retrieving Question</h1>
+  </mat-card>
+</div>
+<div *ngIf="this.question">
   <mat-card>
     <div class="quiz">
       <h1>Quiz</h1>
-
-      <!-- Display the current question -->
-      <p>{{questions[currentQuestion].text}}</p>
-
-      <!-- Display the choices for the current question as radio buttons -->
-      <form>
-        <div *ngFor="let choice of questions[currentQuestion].choices; index as i">
-          <input type="radio" name="choice" [value]="i" (change)="selectAnswer(i)"> {{choice}}
-        </div>
+      <quill-editor
+        [modules]="displayQuillConfig"
+        [readOnly]="true"
+        [(ngModel)]="question.questionBody"
+        id="displayQuillConfig"
+      >
+      </quill-editor>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="question-add-form">
+        <ng-container *ngIf="!question.isMultiple">
+          <div *ngFor="let answer of question?.answers">
+            <input type="radio" formControlName="answer" value="{{answer}}">
+            <label class="custom-control-label">{{answer}}</label>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="question.isMultiple">
+          <div *ngFor="let answer of question?.answers">
+            <input type="checkbox" name="answers" value="{{answer}}" (change)="checkCheckBoxvalue($event)">
+            <label>{{answer}}</label>
+          </div>
+        </ng-container>
+        <br>
+        <button class="form-field" type="submit" mat-flat-button color="primary">Next</button>
       </form>
-
-      <button *ngIf="currentQuestion === questions.length - 1" (click)="finishQuiz()">Finish Quiz</button>
-
-      <button *ngIf="currentQuestion < questions.length - 1" (click)="incrementCurrentQuestion"> Next</button>
     </div>
   </mat-card>
 </div>

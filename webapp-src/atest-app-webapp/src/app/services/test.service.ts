@@ -19,4 +19,14 @@ export class TestService {
     }
     return this.http.post(environment.ADD_TEST_ENDPOINT, testInfo, options);
   }
+
+  startTest(roomCode: string, token: string): Observable<any> {
+    const options = {
+      withCredentials: true,
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+    return this.http.get(environment.START_TEST_ENDPOINT + roomCode, options);
+  }
 }

@@ -1,60 +1,60 @@
-import { Component } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {TestService} from "../services/test.service";
+import {AccountService} from "../services/account.service";
+import {switchMap} from "rxjs";
+import Utils from "../Utils/utils";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-multiple-choice',
   templateUrl: './multiple-choice.component.html',
   styleUrls: ['./multiple-choice.component.css']
 })
-export class MultipleChoiceComponent {
-  questions = [
-    {
-      text: 'What is Angular?',
-      choices: [
-        'A JavaScript framework for building web applications',
-        'A tool for managing dependencies in JavaScript projects',
-        'A text editor for web development',
-        'A version control system for web projects'
-      ],
-      correctAnswer: 0
-    },
-    // Add more questions here
-  ];
+export class MultipleChoiceComponent implements OnInit{
+  @Input() roomCode: string;
+  localToken: string;
+  question: any;
+  form: FormGroup = new FormGroup({
+    answer: new FormControl('')
+  });
+  multipleAnswers: string[] = [];
 
-  // The current question being displayed
-  currentQuestion = 0;
-
-  // The user's answers to the questions
-  answers: number[] = [];
-
-  constructor() { }
+  constructor(private accountService: AccountService, private testService: TestService) { }
 
   ngOnInit() {
+    this.accountService.onRefreshAccessToken().pipe(
+      switchMap((token: any) => {
+        this.localToken = token.accessToken;
+        return this.testService.startTest(this.roomCode, this.localToken);
+      })
+    ).subscribe((encryptedQuestion: any) => {
+      this.question = Utils.decryptQuestion(encryptedQuestion);
+    })
   }
 
-  incrementCurrentQuestion() {
-    this.currentQuestion++;
+  displayQuillConfig={
+    syntax: true,
+    toolbar: false
   }
 
-  // Called when the user selects an answer
-  selectAnswer(answer: number) {
-    // Save the answer to the current question
-    this.answers[this.currentQuestion] = answer;
-
-    // Go to the next question
-    this.currentQuestion++;
-  }
-
-  // Called when the user clicks the "Finish Quiz" button
-  finishQuiz() {
-    // Calculate the number of correct answers
-    let numCorrect = 0;
-    for (let i = 0; i < this.questions.length; i++) {
-      if (this.questions[i].correctAnswer === this.answers[i]) {
-        numCorrect++;
-      }
+  checkCheckBoxvalue(event: any){
+    if (!this.multipleAnswers.includes(event.target.value)){
+      this.multipleAnswers.push(event.target.value);
+    } else {
+      this.multipleAnswers = this.multipleAnswers.filter((answer: string) => answer !== event.target.value);
     }
+  }
 
-    // Display the number of correct answers to the user
-    alert('You got ' + numCorrect + ' out of ' + this.questions.length + ' questions correct!');
+  submit(){
+    if(this.question.isMultiple){
+      console.log(this.multipleAnswers);
+    } else {
+      console.log([this.form.get('answer')?.value]);
+    }
+    this.question = {
+      "questionBody":"<p>spiderman</p>",
+      "answers":["bat","man"],
+      "isMultiple": false
+    }
   }
 }
