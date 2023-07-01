@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const {Schema, model} = mongoose;
 
 const testSchema = new Schema({
-    testCode: {type: String, required: true},
+    testCode: {type: String, required: true, unique: true},
     owner: {type: Schema.Types.ObjectId, ref:'user'},
     questions: {type: [Schema?.Types.ObjectId], ref:'question'}
 }, {

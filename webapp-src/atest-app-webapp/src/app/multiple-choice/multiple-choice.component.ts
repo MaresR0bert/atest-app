@@ -46,15 +46,11 @@ export class MultipleChoiceComponent implements OnInit{
   }
 
   submit(){
-    if(this.question.isMultiple){
-      console.log(this.multipleAnswers);
-    } else {
-      console.log([this.form.get('answer')?.value]);
-    }
-    this.question = {
-      "questionBody":"<p>spiderman</p>",
-      "answers":["bat","man"],
-      "isMultiple": false
-    }
+    const answer: string[] = this.question.isMultiple ? this.multipleAnswers : [this.form.get('answer')?.value];
+
+    this.testService.verifyAndGetNextQuestion(answer, this.question._id, this.localToken)
+      .subscribe((newQuestion: any) => {
+        this.question = Utils.decryptQuestion(newQuestion);
+      });
   }
 }
