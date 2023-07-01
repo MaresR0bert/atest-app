@@ -56,7 +56,10 @@ export class TestCreationComponent implements OnInit{
   submit(){
     if(this.form.get('testCode')?.errors){
       this.error = "Please insert test Code";
+    } else if (!this.selectedQuestionsList.filter((question: any) => question.difficulty === 5).length) {
+      this.error = "Please create a test using at least a question of difficulty level 5";
     } else {
+      this.error = null;
       const createdTest = {
         testCode: this.form.get('testCode')?.value,
         questions: this.selectedQuestionsList.map((question: any) => question._id)
