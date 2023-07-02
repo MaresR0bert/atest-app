@@ -21,4 +21,12 @@ export class NavbarComponent {
       }
     });
   }
+
+  dashboardButtonHandler(): void {
+    this.router.navigateByUrl('/dashboard');
+  }
+
+  testLogsButtonHandler(): void {
+    this.router.navigateByUrl('/testLogs');
+  }
 }

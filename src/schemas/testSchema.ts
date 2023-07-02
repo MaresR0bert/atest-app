@@ -5,7 +5,8 @@ const {Schema, model} = mongoose;
 const testSchema = new Schema({
     testCode: {type: String, required: true, unique: true},
     owner: {type: Schema.Types.ObjectId, ref:'user'},
-    questions: {type: [Schema?.Types.ObjectId], ref:'question'}
+    questions: {type: [Schema?.Types.ObjectId], ref:'question'},
+    isOpen: {type: Boolean}
 }, {
     timestamps: true
 });

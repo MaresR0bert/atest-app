@@ -31,6 +31,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import { ExamComponent } from './exam/exam.component';
 import { MultipleChoiceComponent } from './multiple-choice/multiple-choice.component';
 import { TestCreationComponent } from './test-creation/test-creation.component';
+import { TestLogViewerComponent } from './test-log-viewer/test-log-viewer.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { TestCreationComponent } from './test-creation/test-creation.component';
     PageNotFoundComponent,
     ExamComponent,
     MultipleChoiceComponent,
-    TestCreationComponent
+    TestCreationComponent,
+    TestLogViewerComponent
   ],
   imports: [
     BrowserModule,

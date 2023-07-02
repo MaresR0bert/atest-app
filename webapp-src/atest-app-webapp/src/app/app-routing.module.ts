@@ -13,6 +13,7 @@ import {teacherGuard} from "./guards/teacher.guard";
 import {studentGuard} from "./guards/student.guard";
 import {ExamComponent} from "./exam/exam.component";
 import {TestCreationComponent} from "./test-creation/test-creation.component";
+import {TestLogViewerComponent} from "./test-log-viewer/test-log-viewer.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'teacher', pathMatch:'full'},
@@ -20,6 +21,7 @@ const routes: Routes = [
   {path: 'signup', component: SignupFormComponent, pathMatch: 'full', canActivate: [loginGuard]},
   {path: 'dashboard', component: DashboardComponent, pathMatch: 'full', canActivate: [authGuard, studentGuard]},
   {path: 'exam/:id', component: ExamComponent, pathMatch: 'full', canActivate:[authGuard, studentGuard]},
+  {path: 'testLogs', component: TestLogViewerComponent, pathMatch: 'full', canActivate:[authGuard, studentGuard]},
   {path: 'teacher', component: TeacherDashboardComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},
   {path: "question/create", component: QuestionCrudComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},
   {path: "test/create", component: TestCreationComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},

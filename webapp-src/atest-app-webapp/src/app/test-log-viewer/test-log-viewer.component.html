@@ -1,0 +1,24 @@
+<app-navbar/>
+<div class="host">
+  <mat-card>
+    <div>
+      <mat-card-title>Previous Test You've Taken:</mat-card-title>
+      <div class="gradeTable">
+        <table>
+          <thead>
+          <tr>
+            <th><h2>Test</h2></th>
+            <th><h2>Grade</h2></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let test of tests">
+            <td><h3>{{test.testCode}}</h3></td>
+            <td><h3>{{test.score}}</h3></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </mat-card>
+</div>

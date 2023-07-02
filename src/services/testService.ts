@@ -18,6 +18,7 @@ const anonymizeQuestion = (question: any) => {
 const addTest = async (req: any, res: any) => {
     const newTest = JSON.parse(JSON.stringify(req.body));
     Object.assign(newTest, {owner: res.locals.userId});
+    Object.assign(newTest, {isOpen: true});
 
     const testDoc = new Test(newTest);
     testDoc.save();
@@ -30,6 +31,9 @@ const startTest = async (req: any, res: any) => {
     const currentUserLog = await UserLog.find({owner: res.locals.userId}).exec();
     if(!currentUserLog.length){
         const testDoc = await Test.findOne({"testCode": req.params.room}).exec();
+        if(!testDoc!.isOpen) {
+            return responseFactory(res, 401, {error: "Test is NOT Open"});
+        }
         const testQuestions = await Question.find().where('_id').in(testDoc!.questions).exec();
 
         const userLogDoc = new UserLog({
