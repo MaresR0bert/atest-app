@@ -1,0 +1,27 @@
+.host {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+}
+
+mat-card-title {
+  display: flex;
+  justify-content: center;
+  padding: 25PX;
+  font-size: 40px;
+  color: #36013F;
+}
+
+mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+
+.gradeTable {
+  padding: 50px;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}

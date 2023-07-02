@@ -20,6 +20,26 @@ export class TestService {
     return this.http.post(environment.ADD_TEST_ENDPOINT, testInfo, options);
   }
 
+  getTests(token:string): Observable<any> {
+    const options = {
+      withCredentials: true,
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+    return this.http.get(environment.GET_TESTS_ENDPOINT, options);
+  }
+
+  changeTestStatus(testId: string, token: string): Observable<any> {
+    const options = {
+      withCredentials: true,
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+    return this.http.get(environment.CHANGE_TEST_STATUS_ENDPOINT + testId, options);
+  }
+
   startTest(roomCode: string, token: string): Observable<any> {
     const options = {
       withCredentials: true,

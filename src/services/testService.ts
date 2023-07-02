@@ -100,4 +100,19 @@ const verifyAndChooseNextQuestion = async (req: any, res: any) => {
     }
 }
 
-export default {addTest, startTest, verifyAndChooseNextQuestion}
+const getTests = async (req: any, res: any) => {
+    const tests = await Test.find({owner: res.locals.userId}).exec();
+    return responseFactory(res, 200, tests);
+}
+
+const changeTestStatus = async (req: any, res: any) => {
+
+    const testDoc = await Test.findById(req.params.testId).exec();
+    await Test.findByIdAndUpdate(req.params.testId, {
+        isOpen: !testDoc!.isOpen
+    })
+
+    return responseFactory(res, 200, {});
+}
+
+export default {addTest, startTest, verifyAndChooseNextQuestion, getTests, changeTestStatus}
