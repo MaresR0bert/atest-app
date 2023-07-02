@@ -32,6 +32,7 @@ import { ExamComponent } from './exam/exam.component';
 import { MultipleChoiceComponent } from './multiple-choice/multiple-choice.component';
 import { TestCreationComponent } from './test-creation/test-creation.component';
 import { TestLogViewerComponent } from './test-log-viewer/test-log-viewer.component';
+import { MonitorTestComponent } from './monitor-test/monitor-test.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { TestLogViewerComponent } from './test-log-viewer/test-log-viewer.compon
     ExamComponent,
     MultipleChoiceComponent,
     TestCreationComponent,
-    TestLogViewerComponent
+    TestLogViewerComponent,
+    MonitorTestComponent
   ],
   imports: [
     BrowserModule,

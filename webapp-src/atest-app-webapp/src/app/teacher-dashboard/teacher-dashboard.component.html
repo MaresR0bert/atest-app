@@ -9,6 +9,7 @@
           <tr>
             <th><h2>Test</h2></th>
             <th><h2>Status</h2></th>
+            <th><h2>Monitor</h2></th>
           </tr>
           </thead>
           <tbody>
@@ -17,6 +18,11 @@
             <td>
               <button class="form-field" type="button" mat-flat-button color="primary" (click)="changeTestStatus(test._id)">
                 <mat-icon>{{test.isOpen ? "clear":"check"}}</mat-icon>
+              </button>
+            </td>
+            <td>
+              <button class="form-field" type="button" mat-flat-button color="primary" (click)="monitor(test.testCode)" [disabled]=!test.isOpen>
+                <mat-icon>videocam</mat-icon>
               </button>
             </td>
           </tr>

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AccountService} from "../services/account.service";
 import {switchMap} from "rxjs";
 import {TestService} from "../services/test.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-teacher-dashboard',
@@ -13,7 +14,7 @@ export class TeacherDashboardComponent implements OnInit{
   localToken: string;
   tests: any[] = [];
 
-  constructor(private accountService: AccountService, private testService: TestService) {
+  constructor(private router:Router, private accountService: AccountService, private testService: TestService) {
 
   }
 
@@ -32,6 +33,10 @@ export class TeacherDashboardComponent implements OnInit{
     this.testService.changeTestStatus(testId, this.localToken).subscribe(() => {
       window.location.reload();
     });
+  }
+
+  monitor(testCode: string) {
+    this.router.navigateByUrl('/monitor/'+ testCode);
   }
 
 }

@@ -14,6 +14,7 @@ import {studentGuard} from "./guards/student.guard";
 import {ExamComponent} from "./exam/exam.component";
 import {TestCreationComponent} from "./test-creation/test-creation.component";
 import {TestLogViewerComponent} from "./test-log-viewer/test-log-viewer.component";
+import {MonitorTestComponent} from "./monitor-test/monitor-test.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'teacher', pathMatch:'full'},
@@ -26,6 +27,7 @@ const routes: Routes = [
   {path: "question/create", component: QuestionCrudComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},
   {path: "test/create", component: TestCreationComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},
   {path: "question/list", component: QuestionListComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},
+  {path: "monitor/:testCode", component: MonitorTestComponent, pathMatch: 'full', canActivate: [authGuard, teacherGuard]},
   {path: "404", component: PageNotFoundComponent, pathMatch: 'full'},
   {path: "**", redirectTo: '404'}
 ];

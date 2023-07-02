@@ -29,4 +29,8 @@ export class TeacherNavbarComponent {
   testCreationButtonHandler(): void {
     this.router.navigateByUrl('/test/create');
   }
+
+  dashboardButtonHandler(){
+    this.router.navigateByUrl('/teacher');
+  }
 }
