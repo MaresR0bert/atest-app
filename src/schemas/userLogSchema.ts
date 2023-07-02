@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const {Schema, model} = mongoose;
 
 const userLogSchema = new Schema({
-    owner: {type: Schema?.Types.ObjectId, ref: 'user'},
+    owner: {type: Schema?.Types.ObjectId, ref: 'user', unique: true},
     testCode: {type: String, required: true},
     pastQuestions: {type: [Schema?.Types.ObjectId], ref:'question'},
     remainingQuestions: {type: [Schema?.Types.ObjectId], ref:'question'},

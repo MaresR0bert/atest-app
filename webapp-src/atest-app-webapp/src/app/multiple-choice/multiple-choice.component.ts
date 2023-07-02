@@ -4,6 +4,7 @@ import {AccountService} from "../services/account.service";
 import {switchMap} from "rxjs";
 import Utils from "../Utils/utils";
 import {FormControl, FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-multiple-choice',
@@ -19,7 +20,7 @@ export class MultipleChoiceComponent implements OnInit{
   });
   multipleAnswers: string[] = [];
 
-  constructor(private accountService: AccountService, private testService: TestService) { }
+  constructor(private router:Router, private accountService: AccountService, private testService: TestService) { }
 
   ngOnInit() {
     this.accountService.onRefreshAccessToken().pipe(
@@ -47,11 +48,18 @@ export class MultipleChoiceComponent implements OnInit{
 
   submit(){
     const answer: string[] = this.question.isMultiple ? this.multipleAnswers : [this.form.get('answer')?.value];
-
-    this.testService.verifyAndGetNextQuestion(answer, this.question._id, this.localToken)
+    this.testService.verifyAndGetNextQuestion(answer, this.question._id, this.localToken, false)
       .subscribe((newQuestion: any) => {
         console.log(newQuestion);
         //this.question = Utils.decryptQuestion(newQuestion);
+      });
+  }
+
+  finishAttempt() {
+    const answer: string[] = this.question.isMultiple ? this.multipleAnswers : [this.form.get('answer')?.value];
+    this.testService.verifyAndGetNextQuestion(answer, this.question._id, this.localToken, true)
+      .subscribe((body: any) => {
+        this.router.navigateByUrl('/dashboard');
       });
   }
 }

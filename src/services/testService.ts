@@ -4,6 +4,7 @@ import {encryptQuestion} from "../util/questionEncryption";
 import Question from "../schemas/questionSchema";
 import {shuffleArray} from "../util/arrayUtils";
 import UserLog from "../schemas/userLogSchema";
+import TestLog from "../schemas/testLogSchema";
 
 const anonymizeQuestion = (question: any) => {
     return {
@@ -49,7 +50,9 @@ const startTest = async (req: any, res: any) => {
         return responseFactory(res, 200, encryptedQuestion);
     } else {
 
-        const encryptedQuestion = encryptQuestion(anonymizeQuestion({}));
+        const encryptedQuestion = encryptQuestion({}
+            //anonymizeQuestion({})
+        );
 
         //TODO Call on Adaptive Algorithm
         return responseFactory(res, 200, encryptedQuestion);
@@ -66,8 +69,6 @@ const verifyAndChooseNextQuestion = async (req: any, res: any) => {
         verification = true;
     }
 
-    //TODO Call on Adaptive Algorithm
-
     const updatedUserLog = await UserLog.findOneAndUpdate({"owner": res.locals.userId}, {
         $push: {pastQuestions: currentQuestion._id, score: currentQuestion.difficulty},
         $pull: {remainingQuestions: currentQuestion._id},
@@ -76,7 +77,23 @@ const verifyAndChooseNextQuestion = async (req: any, res: any) => {
         new: true
     });
 
-    return responseFactory(res, 200, {status: verification});
+    if(req.body.isFinished) {
+        const testLogDoc = new TestLog({
+            owner: res.locals.userId,
+            testCode: updatedUserLog!.testCode,
+            score: updatedUserLog!.score[updatedUserLog!.score.length - 1]
+        })
+
+        testLogDoc.save();
+
+        await UserLog.findByIdAndDelete(updatedUserLog!._id);
+
+        return responseFactory(res, 200, {});
+    } else {
+        //TODO Call on Adaptive Algorithm
+
+        return responseFactory(res, 200, {status: verification});
+    }
 }
 
 export default {addTest, startTest, verifyAndChooseNextQuestion}

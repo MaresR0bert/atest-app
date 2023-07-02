@@ -30,7 +30,7 @@ export class TestService {
     return this.http.get(environment.START_TEST_ENDPOINT + roomCode, options);
   }
 
-  verifyAndGetNextQuestion(answers: string[], questionId: string, token: string): Observable<any> {
+  verifyAndGetNextQuestion(answers: string[], questionId: string, token: string, isFinished: boolean): Observable<any> {
     const options = {
       withCredentials: true,
       headers: {
@@ -38,6 +38,6 @@ export class TestService {
       }
     }
 
-    return this.http.post(environment.VERIFY_ENDPOINT + questionId, {answers: answers}, options)
+    return this.http.post(environment.VERIFY_ENDPOINT + questionId, {answers: answers, isFinished: isFinished}, options)
   }
 }
