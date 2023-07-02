@@ -37,10 +37,7 @@ export class TestService {
         "Authorization": `Bearer ${token}`
       }
     }
-    const answer = {
-      "questionId": questionId,
-      "answers": answers
-    }
-    return this.http.post(environment.VERIFY_ENDPOINT, answer, options)
+
+    return this.http.post(environment.VERIFY_ENDPOINT + questionId, {answers: answers}, options)
   }
 }

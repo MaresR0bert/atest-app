@@ -50,7 +50,8 @@ export class MultipleChoiceComponent implements OnInit{
 
     this.testService.verifyAndGetNextQuestion(answer, this.question._id, this.localToken)
       .subscribe((newQuestion: any) => {
-        this.question = Utils.decryptQuestion(newQuestion);
+        console.log(newQuestion);
+        //this.question = Utils.decryptQuestion(newQuestion);
       });
   }
 }
