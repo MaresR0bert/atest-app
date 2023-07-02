@@ -52,6 +52,14 @@ const startTest = async (req: any, res: any) => {
         const encryptedQuestion = encryptQuestion(anonymizeQuestion(optimalQuestion));
 
         return responseFactory(res, 200, encryptedQuestion);
+
+    } else if (!currentUserLog[0].pastQuestions.length) {
+        const testQuestions = await Question.find().where('_id').in(currentUserLog[0].remainingQuestions).exec();
+        const optimalQuestion = testQuestions!.filter((question: any) => question.difficulty === 5)[0];
+        const encryptedQuestion = encryptQuestion(anonymizeQuestion(optimalQuestion));
+
+        return responseFactory(res, 200, encryptedQuestion);
+
     } else {
 
         const encryptedQuestion = encryptQuestion({}
