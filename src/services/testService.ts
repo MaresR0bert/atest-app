@@ -68,6 +68,14 @@ const verifyAndChooseNextQuestion = async (req: any, res: any) => {
 
     //TODO Call on Adaptive Algorithm
 
+    const updatedUserLog = await UserLog.findOneAndUpdate({"owner": res.locals.userId}, {
+        $push: {pastQuestions: currentQuestion._id, score: currentQuestion.difficulty},
+        $pull: {remainingQuestions: currentQuestion._id},
+        isAscending: verification
+    }, {
+        new: true
+    });
+
     return responseFactory(res, 200, {status: verification});
 }
 
