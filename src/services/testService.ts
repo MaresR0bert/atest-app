@@ -64,8 +64,12 @@ const startTest = async (req: any, res: any) => {
     } else {
 
         //TODO Call on Adaptive Algorithm
+        const testQuestions = await Question.find().where('_id').in(currentUserLog[0].remainingQuestions).exec();
 
-        const optimalData = await axios.post('http://localhost:3002/optimal/', {val: "value"});
+        const optimalData = await axios.post('http://localhost:3002/optimal/', {
+            userLog: currentUserLog,
+            questions: testQuestions
+        });
 
         console.log(optimalData.data);
 
@@ -111,7 +115,12 @@ const verifyAndChooseNextQuestion = async (req: any, res: any) => {
     } else {
         //TODO Call on Adaptive Algorithm
 
-        const optimalData = await axios.post('http://localhost:3002/optimal/', {val: "value"});
+        const testQuestions = await Question.find().where('_id').in(updatedUserLog!.remainingQuestions).exec();
+
+        const optimalData = await axios.post('http://localhost:3002/optimal/', {
+            userLog: updatedUserLog,
+            questions: testQuestions
+        });
 
         console.log(optimalData.data);
 
