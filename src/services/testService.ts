@@ -5,6 +5,7 @@ import Question from "../schemas/questionSchema";
 import {shuffleArray} from "../util/arrayUtils";
 import UserLog from "../schemas/userLogSchema";
 import TestLog from "../schemas/testLogSchema";
+import axios from "axios";
 
 const anonymizeQuestion = (question: any) => {
     return {
@@ -62,11 +63,17 @@ const startTest = async (req: any, res: any) => {
 
     } else {
 
+        //TODO Call on Adaptive Algorithm
+
+        const optimalData = await axios.post('http://localhost:3002/optimal/', {val: "value"});
+
+        console.log(optimalData.data);
+
         const encryptedQuestion = encryptQuestion({}
             //anonymizeQuestion({})
         );
 
-        //TODO Call on Adaptive Algorithm
+
         return responseFactory(res, 200, encryptedQuestion);
     }
 }
@@ -104,7 +111,11 @@ const verifyAndChooseNextQuestion = async (req: any, res: any) => {
     } else {
         //TODO Call on Adaptive Algorithm
 
-        return responseFactory(res, 200, {status: verification});
+        const optimalData = await axios.post('http://localhost:3002/optimal/', {val: "value"});
+
+        console.log(optimalData.data);
+
+        return responseFactory(res, 200, {status: optimalData.data.message});
     }
 }
 
