@@ -23,7 +23,7 @@
         </ng-container>
         <ng-container *ngIf="question.isMultiple">
           <div *ngFor="let answer of question?.answers">
-            <input type="checkbox" name="answers" value="{{answer}}" (change)="checkCheckBoxvalue($event)">
+            <input type="checkbox" name="answers" value="{{answer}}" (change)="checkCheckBoxValue($event)">
             <label>{{answer}}</label>
           </div>
         </ng-container>

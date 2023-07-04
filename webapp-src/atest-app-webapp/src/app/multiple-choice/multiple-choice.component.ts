@@ -38,7 +38,7 @@ export class MultipleChoiceComponent implements OnInit{
     toolbar: false
   }
 
-  checkCheckBoxvalue(event: any){
+  checkCheckBoxValue(event: any){
     if (!this.multipleAnswers.includes(event.target.value)){
       this.multipleAnswers.push(event.target.value);
     } else {
@@ -50,8 +50,13 @@ export class MultipleChoiceComponent implements OnInit{
     const answer: string[] = this.question.isMultiple ? this.multipleAnswers : [this.form.get('answer')?.value];
     this.testService.verifyAndGetNextQuestion(answer, this.question._id, this.localToken, false)
       .subscribe((newQuestion: any) => {
-        console.log(newQuestion);
-        //this.question = Utils.decryptQuestion(newQuestion);
+        if(newQuestion.finished){
+          this.router.navigateByUrl('/testLogs');
+        } else {
+          this.multipleAnswers = [];
+          this.form.reset();
+          this.question = Utils.decryptQuestion(newQuestion);
+        }
       });
   }
 
@@ -59,7 +64,7 @@ export class MultipleChoiceComponent implements OnInit{
     const answer: string[] = this.question.isMultiple ? this.multipleAnswers : [this.form.get('answer')?.value];
     this.testService.verifyAndGetNextQuestion(answer, this.question._id, this.localToken, true)
       .subscribe((body: any) => {
-        this.router.navigateByUrl('/dashboard');
+        this.router.navigateByUrl('/testLogs');
       });
   }
 }

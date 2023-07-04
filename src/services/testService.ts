@@ -67,16 +67,11 @@ const startTest = async (req: any, res: any) => {
         const testQuestions = await Question.find().where('_id').in(currentUserLog[0].remainingQuestions).exec();
 
         const optimalData = await axios.post('http://localhost:3002/optimal/', {
-            userLog: currentUserLog,
+            userLog: currentUserLog[0],
             questions: testQuestions
         });
 
-        console.log(optimalData.data);
-
-        const encryptedQuestion = encryptQuestion({}
-            //anonymizeQuestion({})
-        );
-
+        const encryptedQuestion = encryptQuestion(anonymizeQuestion(optimalData.data));
 
         return responseFactory(res, 200, encryptedQuestion);
     }
@@ -87,10 +82,8 @@ const verifyAndChooseNextQuestion = async (req: any, res: any) => {
     if (!currentQuestion) {
         return responseFactory(res, 404, {err: "No such Question"});
     }
-    let verification: Boolean = false;
-    if(currentQuestion.rightAnswers.sort().join(',')=== req.body.answers.sort().join(',')){
-        verification = true;
-    }
+
+    const verification: Boolean = currentQuestion.rightAnswers.sort().join(',') === req.body.answers.sort().join(',');
 
     const updatedUserLog = await UserLog.findOneAndUpdate({"owner": res.locals.userId}, {
         $push: {pastQuestions: currentQuestion._id, score: currentQuestion.difficulty},
@@ -111,7 +104,7 @@ const verifyAndChooseNextQuestion = async (req: any, res: any) => {
 
         await UserLog.findByIdAndDelete(updatedUserLog!._id);
 
-        return responseFactory(res, 200, {});
+        return responseFactory(res, 200, {finished: true});
     } else {
         //TODO Call on Adaptive Algorithm
 
@@ -122,9 +115,23 @@ const verifyAndChooseNextQuestion = async (req: any, res: any) => {
             questions: testQuestions
         });
 
-        console.log(optimalData.data);
+        if (optimalData.data.finished) {
+            const testLogDoc = new TestLog({
+                owner: res.locals.userId,
+                testCode: updatedUserLog!.testCode,
+                score: updatedUserLog!.score[updatedUserLog!.score.length - 1]
+            })
 
-        return responseFactory(res, 200, {status: optimalData.data.message});
+            testLogDoc.save();
+
+            await UserLog.findByIdAndDelete(updatedUserLog!._id);
+
+            return responseFactory(res, 200, {finished: true});
+        }
+
+        const encryptedQuestion = encryptQuestion(anonymizeQuestion(optimalData.data));
+
+        return responseFactory(res, 200, encryptedQuestion);
     }
 }
 
