@@ -26,19 +26,11 @@ router.route('/').post((req, res) => {
         } while (!tempQuestionList.length && ((iterator + lastScore) <= 10));
 
     } else {
-
-        let iterator = 0;
-
-        do {
-            iterator++;
-            tempQuestionList = questionList.filter(q => q.difficulty === lastScore - iterator)
-        } while (!tempQuestionList.length && ((lastScore - iterator) > 0));
-
+        tempQuestionList = questionList.filter(q => q.difficulty === (lastScore - 1));
     }
 
-    if (!tempQuestionList.length) {
-        tempQuestionList = questionList.filter(q => q.difficulty === lastScore)
-    }
+    tempQuestionList =
+        !tempQuestionList.length ? questionList.filter(q => q.difficulty === lastScore) : tempQuestionList;
 
     if (!tempQuestionList.length) {
         return res.json({finished: true}).status(200);
