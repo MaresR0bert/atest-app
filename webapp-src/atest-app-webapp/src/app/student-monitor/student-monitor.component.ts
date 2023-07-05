@@ -1,41 +1,39 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import { ViewChild, ElementRef } from '@angular/core'
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ViewChild, ElementRef } from '@angular/core'
 
 import { Conversation, UserAgent, Session, Stream } from '@apirtc/apirtc'
 
 @Component({
-  selector: 'app-monitor-test',
-  templateUrl: './monitor-test.component.html',
-  styleUrls: ['./monitor-test.component.css']
+  selector: 'app-student-monitor',
+  templateUrl: './student-monitor.component.html',
+  styleUrls: ['./student-monitor.component.css']
 })
-export class MonitorTestComponent implements OnInit, OnDestroy{
-
-  testCode: string;
+export class StudentMonitorComponent implements OnInit, OnDestroy {
+  @Input() roomCode: string;
   userAgent: UserAgent;
 
-  constructor(private route: ActivatedRoute) {
-  }
-
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.testCode = params['testCode'];
-    });
+  ngOnInit(){
     this.getOrcreateConversation();
   }
 
   @ViewChild("localVideo") videoRef: ElementRef;
 
+  constructor() {
+  }
+
   conversation: any;
   remotesCounter = 0;
 
   getOrcreateConversation() {
+    var localStream: any = null;
+
     this.userAgent = new UserAgent({
       uri: 'apiKey:myDemoApiKey'
     });
+
     this.userAgent.register().then((session: Session) => {
 
-      const conversation: Conversation = session.getConversation(this.testCode);
+      const conversation: Conversation = session.getConversation(this.roomCode);
       this.conversation = conversation;
 
       conversation.on('streamListChanged', (streamInfo: any) => {
@@ -46,8 +44,8 @@ export class MonitorTestComponent implements OnInit, OnDestroy{
               .then((stream: Stream) => {
                 console.log('subscribeToMedia success', stream);
               }).catch((err) => {
-                console.error('subscribeToMedia error', err);
-              });
+              console.error('subscribeToMedia error', err);
+            });
           }
         }
       });
@@ -69,16 +67,30 @@ export class MonitorTestComponent implements OnInit, OnDestroy{
         .then((stream: Stream) => {
 
           console.log('createStream :', stream);
+          localStream = stream;
+
+          localStream.attachToElement(this.videoRef.nativeElement);
 
           conversation.join()
             .then(() => {
+              conversation.publish(localStream).then((stream: Stream) => {
+                console.log('published', stream);
+              }).catch((err: any) => {
+                console.error('publish error', err);
+              });
             }).catch((err: any) => {
-              console.error('Conversation join error', err);
-            });
+            console.error('Conversation join error', err);
+          });
         }).catch((err: any) => {
-          console.error('create stream error', err);
-        });
+        console.error('create stream error', err);
+      });
     });
+    //
+    // setTimeout(()=>{
+    //   userAgent.unregister().then(()=>{
+    //     console.log("Unreg");
+    //   });
+    // }, 5000);
   }
 
   ngOnDestroy() {

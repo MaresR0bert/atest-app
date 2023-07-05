@@ -1,2 +1,11 @@
 <app-teacher-navbar/>
 <h1>You are currently monitoring: {{testCode}}</h1>
+<div id="app">
+    <div *ngIf="conversation" class="container">
+        <div id="remote-container" class="fullscreen">
+        </div>
+        <div id="local-container" [ngClass]="{'over':remotesCounter>0}">
+            <video #localVideo autoplay playsinline></video>
+        </div>
+    </div>
+</div>

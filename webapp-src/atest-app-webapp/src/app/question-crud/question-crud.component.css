@@ -27,3 +27,7 @@ data-cell {
 .form-field {
   width: 100%;
 }
+
+.crud {
+  vertical-align: top;
+}
